@@ -3,6 +3,69 @@ from pilefile import Pile, File
 import turtle as t
 
 
+class Ligne:
+    def __init__(self, couleur, stations):
+        self._couleur = couleur
+        self._stations = stations
+
+    def couleur(self):
+        return self._couleur
+
+    def stations(self):
+        return self._stations
+
+
+def lire_fichier_graphe(nom_fichier):
+    g = Graphe(False)
+    with open(nom_fichier, "r", encoding="utf8") as fp:
+        for ligne in fp:
+            if ligne == "" or ligne[0] == "#":
+                continue
+            (depart, arrivee, poids) = ligne.strip().split("*")
+            g.ajouteArete(depart, arrivee, float(poids))
+    return g
+
+
+def distance(point_a, point_b):
+    """Prends deux tuples et retourne la distance entre les deux points"""
+    return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
+
+
+def conversion_pos():
+    """Convertis les positions des stations pour être dans le référentiel de l'écran"""
+    # Stations plus à l'est et au nord
+    maximum = (
+        pos_jaunes["Longueuil-Université-de-Sherbrooke"][1],
+        pos_vertes["Honoré-Beaugrand"][0],
+    )
+
+    # Stations plus à l'ouest et au sud
+    minimum = (pos_oranges["Montmorency"][1], pos_vertes["Angrignon"][0])
+
+    delta = (abs(maximum[0] - minimum[0]), abs(maximum[1] - minimum[1]))
+    point_zero = (minimum[0] + delta[0] / 2, minimum[1] + delta[1] / 2)
+
+    if delta[0] / delta[1] >= LARGEUR / HAUTEUR:
+        # Plus large que haut
+        ratio = (LARGEUR / 2 - GAP_LARGEUR) / (delta[0] / 2)
+    else:
+        ratio = (HAUTEUR / 2 - GAP_HAUTEUR) / (delta[1] / 2)
+
+    for ligne in lignes:
+        stations = ligne.stations()
+        for station in stations.keys():
+            pos = stations[station]
+            stations[station] = (
+                (pos[1] - point_zero[0]) * ratio,
+                (pos[0] - point_zero[1]) * ratio,
+            )
+            new = t.Turtle(shape="circle")
+            new.color(ligne.couleur())
+            new.speed(0)
+            new.penup()
+            new.goto(stations[station][0], stations[station][1])
+
+
 LARGEUR = 1500
 HAUTEUR = 800
 
@@ -13,18 +76,15 @@ ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 
+reseau = lire_fichier_graphe("reseau_metro.txt")
 
-def distance(point_a, point_b):
-    """Prends deux tuples et retourne la distance entre les deux points"""
-    return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
-
-
+# Initialiser les positions des stations avec leurs coordonnées géographiques
 pos_vertes = {
     "Angrignon": (45.44632663047244, -73.60438711239586),
     "Monk": (45.45113793597787, -73.59369024231648),
     "Jolicoeur": (45.456959918306445, -73.58191609861242),
     "Verdun": (45.459274239361626, -73.57178397519435),
-    "De l'Église": (45.461774201465914, -73.56778156851156),
+    "De L'Église": (45.461774201465914, -73.56778156851156),
     "LaSalle": (45.47078387668829, -73.5659081574753),
     "Charlevoix": (45.4783006998537, -73.56983724163561),
     "Lionel-Groulx": (45.48284553457747, -73.5801148437035),
@@ -104,35 +164,14 @@ pos_bleues = {
     "Saint-Michel": (45.559874990313844, -73.60010065469058),
 }
 
-lignes = [pos_vertes, pos_oranges, pos_jaunes, pos_bleues]
+lignes = [
+    Ligne("green", pos_vertes),
+    Ligne("orange", pos_oranges),
+    Ligne("yellow", pos_jaunes),
+    Ligne("blue", pos_bleues),
+]
 
-maximum = (
-    pos_jaunes["Longueuil-Université-de-Sherbrooke"][1],
-    pos_vertes["Honoré-Beaugrand"][0],
-)
-
-minimum = (pos_oranges["Montmorency"][1], pos_vertes["Angrignon"][0])
-
-delta = (abs(maximum[0] - minimum[0]), abs(maximum[1] - minimum[1]))
-point_zero = (minimum[0] + delta[0] / 2, minimum[1] + delta[1] / 2)
-
-if delta[0] / delta[1] >= LARGEUR / HAUTEUR:
-    # Plus large que haut
-    ratio = (LARGEUR / 2 - GAP_LARGEUR) / (delta[0] / 2)
-else:
-    ratio = (HAUTEUR / 2 - GAP_HAUTEUR) / (delta[1] / 2)
-
-for ligne in lignes:
-    for station in ligne.keys():
-        pos = ligne[station]
-        ligne[station] = (
-            (pos[1] - point_zero[0]) * ratio,
-            (pos[0] - point_zero[1]) * ratio,
-        )
-        new = t.Turtle(shape="circle")
-        new.speed(0)
-        new.penup()
-        new.goto(ligne[station][0], ligne[station][1])
+conversion_pos()
 
 distance_ratio = 844.29 / distance(pos_vertes["Angrignon"], pos_vertes["Monk"])
 

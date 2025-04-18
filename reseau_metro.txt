@@ -1,0 +1,69 @@
+Angrignon*Monk*844.29
+Monk*Jolicoeur*1062.85
+Jolicoeur*Verdun*761.39
+Verdun*De L'Église*563.86
+De L'Église*LaSalle*812.30
+LaSalle*Charlevoix*707.25
+Charlevoix*Lionel-Groulx*1077.31
+Lionel-Groulx*Atwater*1387.74
+Atwater*Guy-Concordia*681.54
+Guy-Concordia*Peel*593.14
+Peel*McGill*296.52
+McGill*Place-des-Arts*345.69
+Place-des-Arts*Saint-Laurent*354.38
+Saint-Laurent*Berri-UQAM*336.80
+Berri-UQAM*Beaudry*378.76
+Beaudry*Papineau*495.00
+Papineau*Frontenac*1157.57
+Frontenac*Préfontaine*1003.95
+Préfontaine*Joliette*383.43
+Joliette*Pie-IX*766.88
+Pie-IX*Viau*621.85
+Viau*L'Assomption*895.87
+L'Assomption*Cadillac*781.69
+Cadillac*Langelier*518.51
+Langelier*Radisson*621.79
+Radisson*Honoré-Beaugrand*716.99
+Côte-Vertu*Du Collège*777.24
+Du Collège*De la Savane*1281.69
+De la Savane*Namur*786.70
+Namur*Plamondon*988.47
+Plamondon*Côte-Sainte-Catherine*451.10
+Côte-Sainte-Catherine*Snowdon*693.00
+Snowdon*Villa-Maria*884.41
+Villa-Maria*Vendôme*1407.32
+Vendôme*Place-Saint-Henri*1450.88
+Place-Saint-Henri*Lionel-Groulx*579.60
+Lionel-Groulx*Georges-Vanier*758.60
+Georges-Vanier*Lucien-L'Allier*530.60
+Lucien-L'Allier*Bonaventure*381.60
+Bonaventure*Square-Victoria-OACI*392.60
+Square-Victoria-OACI*Place-d'Armes*356.60
+Place-d'Armes*Champ-de-Mars*370.60
+Champ-de-Mars*Berri-UQAM*720.50
+Berri-UQAM*Sherbrooke*579.10
+Sherbrooke*Mont-Royal*932.10
+Mont-Royal*Laurier*932.10
+Laurier*Rosemont*746.10
+Rosemont*Beaubien*541.10
+Beaubien*Jean-Talon*712.10
+Jean-Talon*Jarry*977.10
+Jarry*Crémazie*825.60
+Crémazie*Sauvé*1279.60
+Sauvé*Henri-Bourassa*771.60
+Henri-Bourassa*Cartier*1101.60
+Cartier*De la Concorde*2073.60
+De la Concorde*Montmorency*847.60
+Berri-UQAM*Jean-Drapeau*2362.10
+Jean-Drapeau*Longueuil-Université-de-Sherbrooke*1572.10
+Snowdon*Côte-des-Neiges*959.60
+Côte-des-Neiges*Université-de-Montréal*764.60
+Université-de-Montréal*Édouard-Montpetit*667.60
+Édouard-Montpetit*Outremont*1090.60
+Outremont*Acadie*728.60
+Acadie*Parc*727.60
+Parc*De Castelnau*490.60
+De Castelnau*Jean-Talon*471.60
+Jean-Talon*Fabre*839.60
+Fabre*D'Iberville*644.50
+D'Iberville*Saint-Michel*607.60
