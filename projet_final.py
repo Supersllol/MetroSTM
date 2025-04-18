@@ -2,7 +2,8 @@ from graphelib import Graphe
 from pilefile import Pile, File
 import turtle as t
 
-LARGEUR = 1000
+
+LARGEUR = 1500
 HAUTEUR = 800
 
 GAP_HAUTEUR = 50
@@ -12,104 +13,110 @@ ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 
-ligne_verte = {
-    "Angrignon": (45.4461, -73.6035),
-    "Monk": (45.4527, -73.5942),
-    "Jolicoeur": (45.4573, -73.5866),
-    "Verdun": (45.4620, -73.5776),
-    "De l'Église": (45.4636, -73.5706),
-    "LaSalle": (45.4708, -73.5675),
-    "Charlevoix": (45.4781, -73.5677),
-    "Lionel-Groulx": (45.4860, -73.5794),
-    "Atwater": (45.4898, -73.5858),
-    "Guy-Concordia": (45.4956, -73.5804),
-    "Peel": (45.5010, -73.5746),
-    "McGill": (45.5045, -73.5715),
-    "Place-des-Arts": (45.5076, -73.5683),
-    "Saint-Laurent": (45.5104, -73.5649),
-    "Berri-UQAM": (45.5151, -73.5617),
-    "Beaudry": (45.5193, -73.5566),
-    "Papineau": (45.5240, -73.5517),
-    "Frontenac": (45.5310, -73.5491),
-    "Préfontaine": (45.5398, -73.5519),
-    "Joliette": (45.5461, -73.5516),
-    "Pie-IX": (45.5540, -73.5522),
-    "Viau": (45.5605, -73.5493),
-    "Assomption": (45.5685, -73.5485),
-    "Cadillac": (45.5765, -73.5456),
-    "Langelier": (45.5830, -73.5412),
-    "Radisson": (45.5873, -73.5394),
-    "Honoré-Beaugrand": (45.5891, -73.5368),
+
+def distance(point_a, point_b):
+    """Prends deux tuples et retourne la distance entre les deux points"""
+    return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
+
+
+pos_vertes = {
+    "Angrignon": (45.44632663047244, -73.60438711239586),
+    "Monk": (45.45113793597787, -73.59369024231648),
+    "Jolicoeur": (45.456959918306445, -73.58191609861242),
+    "Verdun": (45.459274239361626, -73.57178397519435),
+    "De l'Église": (45.461774201465914, -73.56778156851156),
+    "LaSalle": (45.47078387668829, -73.5659081574753),
+    "Charlevoix": (45.4783006998537, -73.56983724163561),
+    "Lionel-Groulx": (45.48284553457747, -73.5801148437035),
+    "Atwater": (45.48939286874781, -73.58465153063497),
+    "Guy-Concordia": (45.49576927254413, -73.57871894023853),
+    "Peel": (45.50092730279481, -73.5745084700718),
+    "McGill": (45.50404316223521, -73.57175459497526),
+    "Place-des-Arts": (45.50780216925632, -73.5693345229893),
+    "Saint-Laurent": (45.510843218908995, -73.56462334814317),
+    "Berri-UQAM": (45.515061686485794, -73.56170677295312),
+    "Beaudry": (45.51898897841842, -73.55599233475945),
+    "Papineau": (45.52373599331382, -73.55267315869503),
+    "Frontenac": (45.53314303795326, -73.55284006027358),
+    "Préfontaine": (45.541453942129955, -73.55491874295),
+    "Joliette": (45.54705407604158, -73.5522483186083),
+    "Pie-IX": (45.5536842533481, -73.55221797293709),
+    "Viau": (45.56117413763484, -73.54774197751738),
+    "L'Assomption": (45.56933219450834, -73.54736265583931),
+    "Cadillac": (45.57689433490281, -73.54728679160522),
+    "Langelier": (45.58279889374338, -73.54387289689205),
+    "Radisson": (45.58940638495715, -73.53958873597698),
+    "Honoré-Beaugrand": (45.59690601105572, -73.53616273612703),
 }
 
-ligne_orange = {
-    "Côte-Vertu": (45.5142, -73.6831),
-    "Du Collège": (45.5069, -73.6750),
-    "De la Savane": (45.4998, -73.6654),
-    "Namur": (45.4937, -73.6542),
-    "Plamondon": (45.4962, -73.6419),
-    "Côte-Sainte-Catherine": (45.4919, -73.6350),
-    "Snowdon": (45.4843, -73.6280),
-    "Villa-Maria": (45.4804, -73.6173),
-    "Vendôme": (45.4734, -73.6033),
-    "Place-Saint-Henri": (45.4776, -73.5874),
-    "Lionel-Groulx": (45.4860, -73.5794),
-    "Georges-Vanier": (45.4902, -73.5749),
-    "Lucien-L'Allier": (45.4943, -73.5714),
-    "Bonaventure": (45.4979, -73.5673),
-    "Square-Victoria-OACI": (45.5014, -73.5635),
-    "Place-d'Armes": (45.5053, -73.5599),
-    "Champ-de-Mars": (45.5097, -73.5565),
-    "Berri-UQAM": (45.5151, -73.5617),
-    "Sherbrooke": (45.5192, -73.5667),
-    "Mont-Royal": (45.5252, -73.5809),
-    "Laurier": (45.5299, -73.5868),
-    "Rosemont": (45.5353, -73.5943),
-    "Beaubien": (45.5391, -73.6000),
-    "Jean-Talon": (45.5401, -73.6112),
-    "Jarry": (45.5454, -73.6200),
-    "Crémazie": (45.5501, -73.6277),
-    "Sauvé": (45.5537, -73.6350),
-    "Henri-Bourassa": (45.5559, -73.6510),
-    "Cartier": (45.5573, -73.6818),
-    "De la Concorde": (45.5580, -73.7009),
-    "Montmorency": (45.5579, -73.7205),
+pos_oranges = {
+    "Côte-Vertu": (45.514038768636055, -73.6829183584655),
+    "Du Collège": (45.50941496850408, -73.67454986633142),
+    "De la Savane": (45.50037678595598, -73.6609564310472),
+    "Namur": (45.49500205974604, -73.65357137081895),
+    "Plamondon": (45.49483660611086, -73.63911962860185),
+    "Côte-Sainte-Catherine": (45.49243747402053, -73.6338517700045),
+    "Snowdon": (45.485435276656894, -73.62821843821655),
+    "Villa-Maria": (45.47957542305685, -73.62041857433667),
+    "Vendôme": (45.47390294507783, -73.6043393879233),
+    "Place-Saint-Henri": (45.47708526407733, -73.58610036664305),
+    "Lionel-Groulx": (45.482802454355806, -73.58049991429569),
+    "Georges-Vanier": (45.48891254051816, -73.57684672760146),
+    "Lucien-L'Allier": (45.495046660169315, -73.57116588593638),
+    "Bonaventure": (45.49805031291756, -73.56722704843452),
+    "Square-Victoria-OACI": (45.50191326408405, -73.5626759902202),
+    "Place-d'Armes": (45.50576434313652, -73.56030338472793),
+    "Champ-de-Mars": (45.51020933216487, -73.55681128937808),
+    "Berri-UQAM": (45.515020501746925, -73.56130245765378),
+    "Sherbrooke": (45.51827318970493, -73.56848695489798),
+    "Mont-Royal": (45.524540995265234, -73.58137979800767),
+    "Laurier": (45.527122442329926, -73.58634959599692),
+    "Rosemont": (45.531220033887976, -73.59749406570799),
+    "Beaubien": (45.535482062710294, -73.60492118338372),
+    "Jean-Talon": (45.53962155453471, -73.61391869254315),
+    "Jarry": (45.54317627925457, -73.62870465000702),
+    "Crémazie": (45.54589970663174, -73.63877582614458),
+    "Sauvé": (45.549800576580935, -73.65610078954457),
+    "Henri-Bourassa": (45.55607437808822, -73.66764172154079),
+    "Cartier": (45.56016430122332, -73.6817113213702),
+    "De la Concorde": (45.56068026832499, -73.71011112563573),
+    "Montmorency": (45.558458178795746, -73.72222663530799),
 }
 
-ligne_jaune = {
-    "Berri-UQAM": (45.5151, -73.5617),
-    "Jean-Drapeau": (45.5150, -73.5333),
-    "Longueuil-Université-de-Sherbrooke": (45.5248, -73.5226),
+pos_jaunes = {
+    "Berri-UQAM": (45.515020501746925, -73.56130245765378),
+    "Jean-Drapeau": (45.5125115109037, -73.53275360012107),
+    "Longueuil-Université-de-Sherbrooke": (45.52486652235229, -73.52203511856905),
 }
 
-ligne_bleue = {
-    "Snowdon": (45.4843, -73.6280),
-    "Côte-des-Neiges": (45.4962, -73.6240),
-    "Université-de-Montréal": (45.5015, -73.6249),
-    "Édouard-Montpetit": (45.5078, -73.6161),
-    "Outremont": (45.5162, -73.6136),
-    "Acadie": (45.5240, -73.6225),
-    "Parc": (45.5316, -73.6193),
-    "De Castelnau": (45.5367, -73.6148),
-    "Jean-Talon": (45.5401, -73.6112),
-    "Fabre": (45.5450, -73.6062),
-    "D'Iberville": (45.5499, -73.6015),
-    "Saint-Michel": (45.5584, -73.6006),
+pos_bleues = {
+    "Snowdon": (45.48556677167683, -73.62748819318881),
+    "Côte-des-Neiges": (45.49684239370873, -73.62338787475127),
+    "Université-de-Montréal": (45.50272651255283, -73.61837071097955),
+    "Édouard-Montpetit": (45.51012593876159, -73.61244375114761),
+    "Outremont": (45.52008485268856, -73.61498809615652),
+    "Acadie": (45.52341509408773, -73.62373672600935),
+    "Parc": (45.53045484959906, -73.62391165194198),
+    "De Castelnau": (45.535434032102714, -73.61991157383676),
+    "Jean-Talon": (45.53962056492105, -73.61378186795355),
+    "Fabre": (45.54660634088847, -73.6081464033723),
+    "D'Iberville": (45.5537894890579, -73.60215435101786),
+    "Saint-Michel": (45.559874990313844, -73.60010065469058),
 }
 
-lignes = [ligne_verte, ligne_orange, ligne_jaune, ligne_bleue]
+lignes = [pos_vertes, pos_oranges, pos_jaunes, pos_bleues]
 
 maximum = (
-    ligne_jaune["Longueuil-Université-de-Sherbrooke"][1],
-    ligne_verte["Honoré-Beaugrand"][0],
+    pos_jaunes["Longueuil-Université-de-Sherbrooke"][1],
+    pos_vertes["Honoré-Beaugrand"][0],
 )
 
-minimum = (ligne_orange["Montmorency"][1], ligne_verte["Angrignon"][0])
+minimum = (pos_oranges["Montmorency"][1], pos_vertes["Angrignon"][0])
 
 delta = (abs(maximum[0] - minimum[0]), abs(maximum[1] - minimum[1]))
 point_zero = (minimum[0] + delta[0] / 2, minimum[1] + delta[1] / 2)
 
-if delta[0] > delta[1]:
+if delta[0] / delta[1] >= LARGEUR / HAUTEUR:
     # Plus large que haut
     ratio = (LARGEUR / 2 - GAP_LARGEUR) / (delta[0] / 2)
 else:
@@ -123,10 +130,10 @@ for ligne in lignes:
             (pos[0] - point_zero[1]) * ratio,
         )
         new = t.Turtle(shape="circle")
+        new.speed(0)
         new.penup()
         new.goto(ligne[station][0], ligne[station][1])
 
-
-# print(point_zero)
+distance_ratio = 844.29 / distance(pos_vertes["Angrignon"], pos_vertes["Monk"])
 
 ecran.exitonclick()
