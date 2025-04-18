@@ -9,11 +9,14 @@ ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 
-gif = "tralalero tralala.gif"
+gif = "tung tung tung sahur.gif"
+gif2 = "tralalero tralala.gif"
 
 ecran.register_shape(gif)
+ecran.register_shape(gif2)
 test = t.Turtle()
+test2 = t.Turtle()
 test.shape(gif)
-test.shapesize(0.5, 0.5, 0.5)
+test2.shape(gif2)
 
 ecran.exitonclick()
