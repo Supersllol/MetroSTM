@@ -4,9 +4,13 @@ import turtle as t
 
 
 class Ligne:
-    def __init__(self, couleur, stations):
+    def __init__(self, nom, couleur, stations):
+        self._nom = nom
         self._couleur = couleur
         self._stations = stations
+
+    def nom(self):
+        return self._nom
 
     def couleur(self):
         return self._couleur
@@ -15,14 +19,41 @@ class Ligne:
         return self._stations
 
 
+class Station:
+    def __init__(self, nom, pos):
+        self._nom = nom
+        self._pos = pos
+
+    def nom(self):
+        return self._nom
+
+    def pos(self):
+        return self._pos
+
+
 def lire_fichier_graphe(nom_fichier):
     g = Graphe(False)
     with open(nom_fichier, "r", encoding="utf8") as fp:
         for ligne in fp:
             if ligne == "" or ligne[0] == "#":
                 continue
-            (depart, arrivee, poids) = ligne.strip().split("*")
-            g.ajouteArete(depart, arrivee, float(poids))
+            ligne = ligne.strip()
+
+            depart, ligne = ligne.split("(")
+
+            position, ligne = ligne.split(")")
+            position = tuple(float(a) for a in position.split(","))
+
+            connexions, couleurs = ligne.split("%")
+            connexions = tuple(tuple(i.split("*")) for i in connexions.split("&"))
+            couleurs = tuple(couleurs.split("$"))
+
+            for connexion in connexions:
+                if len(connexion) != 2:
+                    continue
+
+                (station, distance) = connexion
+                g.ajouteArete(depart, station, distance)
     return g
 
 
@@ -66,8 +97,8 @@ def conversion_pos():
             new.goto(stations[station][0], stations[station][1])
 
 
-LARGEUR = 1500
-HAUTEUR = 800
+LARGEUR = 1400
+HAUTEUR = 900
 
 GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
@@ -76,7 +107,8 @@ ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 
-reseau = lire_fichier_graphe("reseau_metro.txt")
+graphe_metro = lire_fichier_graphe("reseau_metro.txt")
+print(graphe_metro)
 
 # Initialiser les positions des stations avec leurs coordonnées géographiques
 pos_vertes = {
@@ -165,14 +197,12 @@ pos_bleues = {
 }
 
 lignes = [
-    Ligne("green", pos_vertes),
-    Ligne("orange", pos_oranges),
-    Ligne("yellow", pos_jaunes),
-    Ligne("blue", pos_bleues),
+    # Ligne("green", pos_vertes),
+    # Ligne("orange", pos_oranges),
+    # Ligne("yellow", pos_jaunes),
+    # Ligne("blue", pos_bleues),
 ]
 
-conversion_pos()
-
-distance_ratio = 844.29 / distance(pos_vertes["Angrignon"], pos_vertes["Monk"])
+# conversion_pos()
 
 ecran.exitonclick()

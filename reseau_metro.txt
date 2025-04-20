@@ -1,69 +1,68 @@
-Angrignon*Monk*844.29
-Monk*Jolicoeur*1062.85
-Jolicoeur*Verdun*761.39
-Verdun*De L'Église*563.86
-De L'Église*LaSalle*812.30
-LaSalle*Charlevoix*707.25
-Charlevoix*Lionel-Groulx*1077.31
-Lionel-Groulx*Atwater*1387.74
-Atwater*Guy-Concordia*681.54
-Guy-Concordia*Peel*593.14
-Peel*McGill*296.52
-McGill*Place-des-Arts*345.69
-Place-des-Arts*Saint-Laurent*354.38
-Saint-Laurent*Berri-UQAM*336.80
-Berri-UQAM*Beaudry*378.76
-Beaudry*Papineau*495.00
-Papineau*Frontenac*1157.57
-Frontenac*Préfontaine*1003.95
-Préfontaine*Joliette*383.43
-Joliette*Pie-IX*766.88
-Pie-IX*Viau*621.85
-Viau*L'Assomption*895.87
-L'Assomption*Cadillac*781.69
-Cadillac*Langelier*518.51
-Langelier*Radisson*621.79
-Radisson*Honoré-Beaugrand*716.99
-Côte-Vertu*Du Collège*777.24
-Du Collège*De la Savane*1281.69
-De la Savane*Namur*786.70
-Namur*Plamondon*988.47
-Plamondon*Côte-Sainte-Catherine*451.10
-Côte-Sainte-Catherine*Snowdon*693.00
-Snowdon*Villa-Maria*884.41
-Villa-Maria*Vendôme*1407.32
-Vendôme*Place-Saint-Henri*1450.88
-Place-Saint-Henri*Lionel-Groulx*579.60
-Lionel-Groulx*Georges-Vanier*758.60
-Georges-Vanier*Lucien-L'Allier*530.60
-Lucien-L'Allier*Bonaventure*381.60
-Bonaventure*Square-Victoria-OACI*392.60
-Square-Victoria-OACI*Place-d'Armes*356.60
-Place-d'Armes*Champ-de-Mars*370.60
-Champ-de-Mars*Berri-UQAM*720.50
-Berri-UQAM*Sherbrooke*579.10
-Sherbrooke*Mont-Royal*932.10
-Mont-Royal*Laurier*932.10
-Laurier*Rosemont*746.10
-Rosemont*Beaubien*541.10
-Beaubien*Jean-Talon*712.10
-Jean-Talon*Jarry*977.10
-Jarry*Crémazie*825.60
-Crémazie*Sauvé*1279.60
-Sauvé*Henri-Bourassa*771.60
-Henri-Bourassa*Cartier*1101.60
-Cartier*De la Concorde*2073.60
-De la Concorde*Montmorency*847.60
-Berri-UQAM*Jean-Drapeau*2362.10
-Jean-Drapeau*Longueuil-Université-de-Sherbrooke*1572.10
-Snowdon*Côte-des-Neiges*959.60
-Côte-des-Neiges*Université-de-Montréal*764.60
-Université-de-Montréal*Édouard-Montpetit*667.60
-Édouard-Montpetit*Outremont*1090.60
-Outremont*Acadie*728.60
-Acadie*Parc*727.60
-Parc*De Castelnau*490.60
-De Castelnau*Jean-Talon*471.60
-Jean-Talon*Fabre*839.60
-Fabre*D'Iberville*644.50
-D'Iberville*Saint-Michel*607.60
+# Format: station(position)connexion(s)*distance(s)&connexion(s)*distance(s)...%couleur(s_station_principale)$couleur(s_station_principale)...
+Acadie(45.52341509408773, -73.62373672600935)Outremont*728.60&Parc*727.60%bleu
+Angrignon(45.44632663047244, -73.60438711239586)Monk*844.29%vert
+Atwater(45.48939286874781, -73.58465153063497)Guy-Concordia*681.54&Lionel-Groulx*1387.74%vert
+Beaubien(45.535482062710294, -73.60492118338372)Jean-Talon*712.10&Rosemont*541.10%orange
+Beaudry(45.51898897841842, -73.55599233475945)Berri-UQAM*378.76&Papineau*495.00%vert
+Berri-UQAM(45.515061686485794, -73.56170677295312)Champ-de-Mars*720.50&Jean-Drapeau*2362.10&Saint-Laurent*336.80&Sherbrooke*579.10%jaune$orange$vert
+Bonaventure(45.49805031291756, -73.56722704843452)Lucien-L'Allier*381.60&Square-Victoria-OACI*392.60%orange
+Cadillac(45.57689433490281, -73.54728679160522)L'Assomption*781.69&Langelier*518.51%vert
+Cartier(45.56016430122332, -73.6817113213702)De la Concorde*2073.60&Henri-Bourassa*1101.60%orange
+Champ-de-Mars(45.51020933216487, -73.55681128937808)%orange
+Charlevoix(45.4783006998537, -73.56983724163561)LaSalle*707.25&Lionel-Groulx*1077.31%vert
+Côte-des-Neiges(45.49684239370873, -73.62338787475127)Snowdon*959.60&Université-de-Montréal*764.60%bleu
+Côte-Sainte-Catherine(45.49243747402053, -73.6338517700045)Plamondon*451.10&Snowdon*693.00%orange
+Côte-Vertu(45.514038768636055, -73.6829183584655)Du Collège*777.24%orange
+Crémazie(45.54589970663174, -73.63877582614458)Jarry*825.60&Sauvé*1279.60%orange
+De Castelnau(45.535434032102714, -73.61991157383676)Jean-Talon*471.60&Parc*490.60%bleu
+De L'Église(45.461774201465914, -73.56778156851156)LaSalle*812.30&Verdun*563.86%vert
+De la Concorde(45.56068026832499, -73.71011112563573)Montmorency*847.60%orange
+De la Savane(45.50037678595598, -73.6609564310472)Du Collège*1281.69&Namur*786.70%orange
+D'Iberville(45.5537894890579, -73.60215435101786)Saint-Michel*607.60%bleu
+Du Collège(45.50941496850408, -73.67454986633142)%orange
+Édouard-Montpetit(45.51012593876159, -73.61244375114761)Outremont*1090.60&Université-de-Montréal*667.60%bleu
+Fabre(45.54660634088847, -73.6081464033723)D'Iberville*644.50&Jean-Talon*839.60%bleu
+Frontenac(45.53314303795326, -73.55284006027358)Papineau*495.00&Préfontaine*1003.95%vert
+Georges-Vanier(45.48891254051816, -73.57684672760146)%orange
+Guy-Concordia(45.49576927254413, -73.57871894023853)Peel*593.14%vert
+Henri-Bourassa(45.55607437808822, -73.66764172154079)Cartier*1101.60&Sauvé*771.60%orange
+Honoré-Beaugrand(45.59690601105572, -73.53616273612703)%vert
+Jean-Drapeau(45.5125115109037, -73.53275360012107)Longueuil-Université-de-Sherbrooke*1572.10%jaune
+Jean-Talon(45.53962155453471, -73.61391869254315)Jarry*977.10%bleu$orange
+Jarry(45.54317627925457, -73.62870465000702)Crémazie*825.60%orange
+Joliette(45.54705407604158, -73.5522483186083)Pie-IX*766.88%vert
+L'Assomption(45.56933219450834, -73.54736265583931)Cadillac*781.69&Viau*895.87%vert
+Langelier(45.58279889374338, -73.54387289689205)Radisson*621.79%vert
+LaSalle(45.47078387668829, -73.5659081574753)Charlevoix*707.25&De L'Église*812.30%vert
+Laurier(45.527122442329926, -73.58634959599692)Rosemont*746.10%orange
+Lionel-Groulx(45.48284553457747, -73.5801148437035)Georges-Vanier*758.60&Place-Saint-Henri*579.60%orange$vert
+Longueuil-Université-de-Sherbrooke(45.52486652235229, -73.52203511856905)%jaune
+Lucien-L'Allier(45.495046660169315, -73.57116588593638)Bonaventure*381.60&Georges-Vanier*530.60%orange
+McGill(45.50404316223521, -73.57175459497526)Place-des-Arts*345.69%vert
+Monk(45.45113793597787, -73.59369024231648)Jolicoeur*1062.85%vert
+Mont-Royal(45.524540995265234, -73.58137979800767)Laurier*932.10&Sherbrooke*932.10%orange
+Montmorency(45.558458178795746, -73.72222663530799)%orange
+Namur(45.49500205974604, -73.65357137081895)Plamondon*988.47%orange
+Outremont(45.52008485268856, -73.61498809615652)%bleu
+Papineau(45.52373599331382, -73.55267315869503)Frontenac*1157.57%vert
+Parc(45.53045484959906, -73.62391165194198)De Castelnau*490.60%bleu
+Peel(45.50092730279481, -73.5745084700718)%vert
+Pie-IX(45.5536842533481, -73.55221797293709)Viau*621.85%vert
+Place-d'Armes(45.50576434313652, -73.56030338472793)Square-Victoria-OACI*356.60%orange
+Place-des-Arts(45.50780216925632, -73.5693345229893)Saint-Laurent*354.38%vert
+Place-Saint-Henri(45.47708526407733, -73.58610036664305)Vendôme*1450.88%orange
+Plamondon(45.49483660611086, -73.63911962860185)Côte-Sainte-Catherine*451.10%orange
+Préfontaine(45.541453942129955, -73.55491874295)Joliette*383.43%vert
+Radisson(45.58940638495715, -73.53958873597698)Honoré-Beaugrand*716.99%vert
+Rosemont(45.531220033887976, -73.59749406570799)Beaubien*541.10&Laurier*746.10%orange
+Saint-Laurent(45.510843218908995, -73.56462334814317)%vert
+Saint-Michel(45.559874990313844, -73.60010065469058)%bleu
+Sauvé(45.549800576580935, -73.65610078954457)Henri-Bourassa*771.60%orange
+Sherbrooke(45.51827318970493, -73.56848695489798)Mont-Royal*932.10%orange
+Snowdon(45.485435276656894, -73.62821843821655)Villa-Maria*884.41%bleu$orange
+Square-Victoria-OACI(45.50191326408405, -73.5626759902202)Place-d'Armes*356.60%orange
+Université-de-Montréal(45.50272651255283, -73.61837071097955)Édouard-Montpetit*667.60%bleu
+Vendôme(45.47390294507783, -73.6043393879233)Place-Saint-Henri*1450.88&Villa-Maria*1407.32%orange
+Verdun(45.459274239361626, -73.57178397519435)De L'Église*563.86&Jolicoeur*761.39%vert
+Viau(45.56117413763484, -73.54774197751738)L'Assomption*895.87&Pie-IX*621.85%vert
+Villa-Maria(45.47957542305685, -73.62041857433667)Vendôme*1407.32%orange
