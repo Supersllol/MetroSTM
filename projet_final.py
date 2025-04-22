@@ -3,35 +3,11 @@ from pilefile import Pile, File
 import turtle as t
 
 
-class Ligne:
-    def __init__(self, nom, couleur, stations):
-        self._nom = nom
-        self._couleur = couleur
-        self._stations = stations
-
-    def nom(self):
-        return self._nom
-
-    def couleur(self):
-        return self._couleur
-
-    def stations(self):
-        return self._stations
-
-
-class Station:
-    def __init__(self, nom, pos):
-        self._nom = nom
-        self._pos = pos
-
-    def nom(self):
-        return self._nom
-
-    def pos(self):
-        return self._pos
-
-
-def lire_fichier_graphe(nom_fichier):
+def lire_fichier_metro(nom_fichier):
+    """Lis le fichier contenant l'information sur le réseau de métro, en construisant un
+    graphe reliant les stations avec les distances entre elles, et en créant des stations
+    avec leurs position et leur(s) couleur(s)
+    """
     g = Graphe(False)
     with open(nom_fichier, "r", encoding="utf8") as fp:
         for ligne in fp:
@@ -107,9 +83,6 @@ ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 
-graphe_metro = lire_fichier_graphe("reseau_metro.txt")
-print(graphe_metro)
-
 # Initialiser les positions des stations avec leurs coordonnées géographiques
 pos_vertes = {
     "Angrignon": (45.44632663047244, -73.60438711239586),
@@ -126,7 +99,7 @@ pos_vertes = {
     "McGill": (45.50404316223521, -73.57175459497526),
     "Place-des-Arts": (45.50780216925632, -73.5693345229893),
     "Saint-Laurent": (45.510843218908995, -73.56462334814317),
-    "Berri-UQAM": (45.515061686485794, -73.56170677295312),
+    "Berri-UQAM": (45.515020501746925, -73.56130245765378),
     "Beaudry": (45.51898897841842, -73.55599233475945),
     "Papineau": (45.52373599331382, -73.55267315869503),
     "Frontenac": (45.53314303795326, -73.55284006027358),
@@ -152,7 +125,7 @@ pos_oranges = {
     "Villa-Maria": (45.47957542305685, -73.62041857433667),
     "Vendôme": (45.47390294507783, -73.6043393879233),
     "Place-Saint-Henri": (45.47708526407733, -73.58610036664305),
-    "Lionel-Groulx": (45.482802454355806, -73.58049991429569),
+    "Lionel-Groulx": (45.48284553457747, -73.5801148437035),
     "Georges-Vanier": (45.48891254051816, -73.57684672760146),
     "Lucien-L'Allier": (45.495046660169315, -73.57116588593638),
     "Bonaventure": (45.49805031291756, -73.56722704843452),
@@ -182,7 +155,7 @@ pos_jaunes = {
 }
 
 pos_bleues = {
-    "Snowdon": (45.48556677167683, -73.62748819318881),
+    "Snowdon": (45.485435276656894, -73.62821843821655),
     "Côte-des-Neiges": (45.49684239370873, -73.62338787475127),
     "Université-de-Montréal": (45.50272651255283, -73.61837071097955),
     "Édouard-Montpetit": (45.51012593876159, -73.61244375114761),
@@ -190,11 +163,13 @@ pos_bleues = {
     "Acadie": (45.52341509408773, -73.62373672600935),
     "Parc": (45.53045484959906, -73.62391165194198),
     "De Castelnau": (45.535434032102714, -73.61991157383676),
-    "Jean-Talon": (45.53962056492105, -73.61378186795355),
+    "Jean-Talon": (45.53962155453471, -73.61391869254315),
     "Fabre": (45.54660634088847, -73.6081464033723),
     "D'Iberville": (45.5537894890579, -73.60215435101786),
     "Saint-Michel": (45.559874990313844, -73.60010065469058),
 }
+
+graphe_metro = lire_fichier_metro("reseau_metro.txt")
 
 lignes = [
     # Ligne("green", pos_vertes),

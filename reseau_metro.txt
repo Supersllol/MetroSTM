@@ -4,7 +4,7 @@ Angrignon(45.44632663047244, -73.60438711239586)Monk*844.29%vert
 Atwater(45.48939286874781, -73.58465153063497)Guy-Concordia*681.54&Lionel-Groulx*1387.74%vert
 Beaubien(45.535482062710294, -73.60492118338372)Jean-Talon*712.10&Rosemont*541.10%orange
 Beaudry(45.51898897841842, -73.55599233475945)Berri-UQAM*378.76&Papineau*495.00%vert
-Berri-UQAM(45.515061686485794, -73.56170677295312)Champ-de-Mars*720.50&Jean-Drapeau*2362.10&Saint-Laurent*336.80&Sherbrooke*579.10%jaune$orange$vert
+Berri-UQAM(45.515020501746925, -73.56130245765378) Champ-de-Mars*720.50&Jean-Drapeau*2362.10&Saint-Laurent*336.80&Sherbrooke*579.10%jaune$orange$vert
 Bonaventure(45.49805031291756, -73.56722704843452)Lucien-L'Allier*381.60&Square-Victoria-OACI*392.60%orange
 Cadillac(45.57689433490281, -73.54728679160522)L'Assomption*781.69&Langelier*518.51%vert
 Cartier(45.56016430122332, -73.6817113213702)De la Concorde*2073.60&Henri-Bourassa*1101.60%orange
