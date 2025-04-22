@@ -2,6 +2,35 @@ from graphelib import Graphe
 from pilefile import Pile, File
 import turtle as t
 
+class Station:
+    def __init__(self, nom, ligne, position):
+        self._nom = nom
+        self._ligne = ligne
+        self.position = position
+    
+    def get_nom(self):
+        return self._nom
+    
+    def get_ligne(self):
+        return self._ligne
+    
+    def get_position(self):
+        return self._position
+    
+class Ligne:
+    def __init__(self, nom, couleur):
+        self._nom = nom
+        self._couleur = couleur
+        self._liste_stations = []
+
+    def get_nom(self):
+        return self._nom
+    
+    def get_couleur(self):
+        return self._couleur
+    
+    def get_stations(self):
+        return self._liste_stations
 
 def lire_fichier_metro(nom_fichier):
     """Lis le fichier contenant l'information sur le réseau de métro, en construisant un
