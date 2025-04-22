@@ -98,24 +98,35 @@ def conversion_pos():
     else:
         ratio = (HAUTEUR / 2 - GAP_HAUTEUR) / (delta[1] / 2)
 
+    for nom_station in stations.keys():
+        pos = stations[nom_station].get_position()
+        new_pos = (
+            (pos[1] - point_zero[0]) * ratio,
+            (pos[0] - point_zero[1]) * ratio,
+        )
+        stations[nom_station].set_position(new_pos)
+
+
+def dessine_stations():
     for ligne in lignes:
-        for station in ligne.get_ordre_stations():
-            pos = stations[station].get_position()
-            # print("old", pos)
-            new_pos = (
-                (pos[1] - point_zero[0]) * ratio,
-                (pos[0] - point_zero[1]) * ratio,
-            )
-            # print("new", new_pos)
-            stations[station].set_position(new_pos)
-            new = t.Turtle(shape="circle")
-            new.color(ligne.get_couleur())
-            new.shapesize(0.5)
-            new.speed(0)
-            new.penup()
-            new.goto(
-                stations[station].get_position()[0], stations[station].get_position()[1]
-            )
+        tortue = t.Turtle()
+        tortue.speed(0)
+        line_color = ligne.get_couleur()
+        tortue.pencolor(line_color)
+        tortue.pensize(3)
+        tortue.hideturtle()
+        tortue.penup()
+        for nom_station in ligne.get_ordre_stations():
+            pos_station = stations[nom_station].get_position()
+            tortue.goto(pos_station)
+            tortue.pendown()
+        tortue.penup()
+        for nom_station in ligne.get_ordre_stations():
+            pos_station = stations[nom_station].get_position()
+            tortue.goto(pos_station)
+            tortue.dot(8, "black")
+            tortue.pencolor("black")
+            tortue.write(nom_station, font=("Arial", 10, "normal"))
 
 
 LARGEUR = 1200
@@ -127,105 +138,115 @@ GAP_LARGEUR = 50
 ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
+ecran.bgcolor("#87CEEB")
 
 stations = {}
 graphe_metro = lire_fichier_metro("reseau_metro.txt")
+
+ordre_jaune = ["Berri-UQAM", "Jean-Drapeau", "Longueuil-Université-de-Sherbrooke"]
+
+ordre_orange = [
+    "Côte-Vertu",
+    "Du Collège",
+    "De la Savane",
+    "Namur",
+    "Plamondon",
+    "Côte-Sainte-Catherine",
+    "Snowdon",
+    "Villa-Maria",
+    "Vendôme",
+    "Place-Saint-Henri",
+    "Lionel-Groulx",
+    "Georges-Vanier",
+    "Lucien-L'Allier",
+    "Bonaventure",
+    "Square-Victoria-OACI",
+    "Place-d'Armes",
+    "Champ-de-Mars",
+    "Berri-UQAM",
+    "Sherbrooke",
+    "Mont-Royal",
+    "Laurier",
+    "Rosemont",
+    "Beaubien",
+    "Jean-Talon",
+    "Jarry",
+    "Crémazie",
+    "Sauvé",
+    "Henri-Bourassa",
+    "Cartier",
+    "De la Concorde",
+    "Montmorency",
+]
+
+ordre_verte = [
+    "Angrignon",
+    "Monk",
+    "Jolicoeur",
+    "Verdun",
+    "De l'Église",
+    "LaSalle",
+    "Charlevoix",
+    "Lionel-Groulx",
+    "Atwater",
+    "Guy-Concordia",
+    "Peel",
+    "McGill",
+    "Place-des-Arts",
+    "Berri-UQAM",
+    "Beaudry",
+    "Papineau",
+    "Frontenac",
+    "Préfontaine",
+    "Joliette",
+    "Pie-IX",
+    "Viau",
+    "L'Assomption",
+    "Cadillac",
+    "Langelier",
+    "Radisson",
+    "Honoré-Beaugrand",
+]
+
+ordre_bleue = [
+    "Snowdon",
+    "Côte-des-Neiges",
+    "Université-de-Montréal",
+    "Édouard-Montpetit",
+    "Outremont",
+    "Acadie",
+    "Parc",
+    "De Castelnau",
+    "Jean-Talon",
+    "Fabre",
+    "D'Iberville",
+    "Saint-Michel",
+]
 
 lignes = [
     Ligne(
         "jaune",
         "yellow",
-        ["Berri-UQAM", "Jean-Drapeau", "Longueuil-Université-de-Sherbrooke"],
+        ordre_jaune,
     ),
     Ligne(
         "orange",
         "orange",
-        [
-            "Côte-Vertu",
-            "Du Collège",
-            "De la Savane",
-            "Namur",
-            "Plamondon",
-            "Côte-Sainte-Catherine",
-            "Snowdon",
-            "Villa-Maria",
-            "Vendôme",
-            "Place-Saint-Henri",
-            "Lionel-Groulx",
-            "Georges-Vanier",
-            "Lucien-L'Allier",
-            "Bonaventure",
-            "Square-Victoria-OACI",
-            "Place-d'Armes",
-            "Champ-de-Mars",
-            "Berri-UQAM",
-            "Sherbrooke",
-            "Mont-Royal",
-            "Laurier",
-            "Rosemont",
-            "Beaubien",
-            "Jean-Talon",
-            "Jarry",
-            "Crémazie",
-            "Sauvé",
-            "Henri-Bourassa",
-            "Cartier",
-            "De la Concorde",
-            "Montmorency",
-        ],
+        ordre_orange,
     ),
     Ligne(
         "verte",
         "green",
-        [
-            "Angrignon",
-            "Monk",
-            "Jolicoeur",
-            "Verdun",
-            "De l'Église",
-            "LaSalle",
-            "Charlevoix",
-            "Lionel-Groulx",
-            "Atwater",
-            "Guy-Concordia",
-            "Peel",
-            "McGill",
-            "Place-des-Arts",
-            "Berri-UQAM",
-            "Beaudry",
-            "Papineau",
-            "Frontenac",
-            "Préfontaine",
-            "Joliette",
-            "Pie-IX",
-            "Viau",
-            "L'Assomption",
-            "Cadillac",
-            "Langelier",
-            "Radisson",
-            "Honoré-Beaugrand",
-        ],
+        ordre_verte,
     ),
     Ligne(
         "bleue",
         "blue",
-        [
-            "Snowdon",
-            "Côte-des-Neiges",
-            "Université-de-Montréal",
-            "Édouard-Montpetit",
-            "Outremont",
-            "Acadie",
-            "Parc",
-            "De Castelnau",
-            "Jean-Talon",
-            "Fabre",
-            "D'Iberville",
-            "Saint-Michel",
-        ],
+        ordre_bleue,
     ),
 ]
 
 conversion_pos()
+dessine_stations()
 
 ecran.exitonclick()
