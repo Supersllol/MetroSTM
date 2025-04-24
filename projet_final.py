@@ -1,6 +1,7 @@
 from graphelib import Graphe
 from pilefile import Pile, File
 import turtle as t
+import ordre_stations as ord
 
 
 class Station:
@@ -143,106 +144,27 @@ ecran.bgcolor("#87CEEB")
 stations = {}
 graphe_metro = lire_fichier_metro("reseau_metro.txt")
 
-ordre_jaune = ["Berri-UQAM", "Jean-Drapeau", "Longueuil-Université-de-Sherbrooke"]
-
-ordre_orange = [
-    "Côte-Vertu",
-    "Du Collège",
-    "De la Savane",
-    "Namur",
-    "Plamondon",
-    "Côte-Sainte-Catherine",
-    "Snowdon",
-    "Villa-Maria",
-    "Vendôme",
-    "Place-Saint-Henri",
-    "Lionel-Groulx",
-    "Georges-Vanier",
-    "Lucien-L'Allier",
-    "Bonaventure",
-    "Square-Victoria-OACI",
-    "Place-d'Armes",
-    "Champ-de-Mars",
-    "Berri-UQAM",
-    "Sherbrooke",
-    "Mont-Royal",
-    "Laurier",
-    "Rosemont",
-    "Beaubien",
-    "Jean-Talon",
-    "Jarry",
-    "Crémazie",
-    "Sauvé",
-    "Henri-Bourassa",
-    "Cartier",
-    "De la Concorde",
-    "Montmorency",
-]
-
-ordre_verte = [
-    "Angrignon",
-    "Monk",
-    "Jolicoeur",
-    "Verdun",
-    "De l'Église",
-    "LaSalle",
-    "Charlevoix",
-    "Lionel-Groulx",
-    "Atwater",
-    "Guy-Concordia",
-    "Peel",
-    "McGill",
-    "Place-des-Arts",
-    "Berri-UQAM",
-    "Beaudry",
-    "Papineau",
-    "Frontenac",
-    "Préfontaine",
-    "Joliette",
-    "Pie-IX",
-    "Viau",
-    "L'Assomption",
-    "Cadillac",
-    "Langelier",
-    "Radisson",
-    "Honoré-Beaugrand",
-]
-
-ordre_bleue = [
-    "Snowdon",
-    "Côte-des-Neiges",
-    "Université-de-Montréal",
-    "Édouard-Montpetit",
-    "Outremont",
-    "Acadie",
-    "Parc",
-    "De Castelnau",
-    "Jean-Talon",
-    "Fabre",
-    "D'Iberville",
-    "Saint-Michel",
-]
 
 lignes = [
     Ligne(
         "jaune",
         "yellow",
-        ordre_jaune,
+        ord.ordre_jaune,
     ),
     Ligne(
         "orange",
         "orange",
-        ordre_orange,
+        ord.ordre_orange,
     ),
     Ligne(
         "verte",
         "green",
-        ordre_verte,
+        ord.ordre_verte,
     ),
     Ligne(
         "bleue",
         "blue",
-        ordre_bleue,
+        ord.ordre_bleue,
     ),
 ]
 
