@@ -47,7 +47,7 @@ class Ligne:
 
 
 def dijkstra(depart, couleurs):
-    exterieur = set(graphe_metro.listeSommets())
+    exterieur = set(station for station in graphe_metro.listeSommets())
     dist = {s: [math.inf, None] for s in exterieur}
     dist[depart][0] = 0
     while len(exterieur) > 0:
@@ -60,14 +60,23 @@ def dijkstra(depart, couleurs):
             if b in exterieur:
                 new_dist = dist[a][0] + a.poids(b)
                 if dist[b][0] > new_dist:
-                    dist[b] = (new_dist, a.__str__())
+                    dist[b] = (new_dist, a)
     return dist
 
 
 def meilleur_chemin(depart, arrivee, couleurs):
-    """Retourne le chemin le plus court entre la station d'arrivée et de départ,
-    en passant seulement par les stations des couleurs passées en paramètre.
+    """Retourne le chemin le plus court entre la station d'arrivée et de départ
+    sous la forme d'une pile, en passant seulement par les stations des couleurs
+    passées en paramètre. Retourne un tuple avec la pile et la distance.
     """
+    chemin = Pile()
+    dist = dijkstra(depart, None)
+    distance, precedent = dist[arrivee]
+    chemin.empile(arrivee)
+    while precedent != None:
+        chemin.empile(precedent)
+        precedent = dist[precedent][1]
+    return (chemin, distance)
 
 
 def lire_fichier_metro(nom_fichier):
@@ -201,8 +210,10 @@ lignes = []
 
 lire_fichier_metro("reseau_metro.txt")
 conversion_pos()
-resultat = dijkstra(graphe_metro.sommet("Montmorency"), None)
-print(list((som.__str__(), res[0], res[1]) for som, res in resultat.items()))
+test = meilleur_chemin(
+    graphe_metro.sommet("Montmorency"), graphe_metro.sommet("Côte-Vertu"), None
+)
+print(test[0], test[1])
 
 dessine_stations()
 ecran.exitonclick()
