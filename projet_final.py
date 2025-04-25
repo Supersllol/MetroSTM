@@ -5,9 +5,9 @@ import math
 
 
 class Station:
-    def __init__(self, nom, lignes, position, alignement, isdown):
+    def __init__(self, nom, couleurs, position, alignement, isdown):
         self._nom = nom
-        self._lignes = lignes
+        self._couleurs = couleurs
         self._position = position
         self._alignement = alignement
         self._isdown = isdown
@@ -15,8 +15,8 @@ class Station:
     def get_nom(self):
         return self._nom
 
-    def get_ligne(self):
-        return self._lignes
+    def get_couleurs(self):
+        return self._couleurs
 
     def get_position(self):
         return self._position
@@ -26,7 +26,7 @@ class Station:
 
     def get_alignement(self):
         return self._alignement
-    
+
     def isdown(self):
         return self._isdown
 
@@ -51,7 +51,12 @@ class Ligne:
 
 
 def dijkstra(depart, couleurs):
-    exterieur = set(station for station in graphe_metro.listeSommets())
+    exterieur = set(
+        station
+        for station in graphe_metro.listeSommets()
+        if (stations[station.__str__()].get_couleurs() & couleurs) != set()
+    )
+
     dist = {s: [math.inf, None] for s in exterieur}
     dist[depart][0] = 0
     while len(exterieur) > 0:
@@ -74,7 +79,7 @@ def meilleur_chemin(depart, arrivee, couleurs):
     passées en paramètre. Retourne un tuple avec la pile et la distance.
     """
     chemin = Pile()
-    dist = dijkstra(depart, None)
+    dist = dijkstra(depart, couleurs)
     distance, precedent = dist[arrivee]
     chemin.empile(arrivee)
     while precedent != None:
@@ -110,7 +115,8 @@ def lire_fichier_metro(nom_fichier):
 
             connexions, couleurs = ligne.split("%")
             connexions = tuple(tuple(i.split("*")) for i in connexions.split("&"))
-            couleurs = tuple(couleurs.split("$"))
+            couleurs = couleurs.split("=")[0]
+            couleurs = set(couleurs.split("$"))
 
             alignement = ligne.split("=")
             if len(alignement) == 2:
@@ -120,9 +126,9 @@ def lire_fichier_metro(nom_fichier):
                 else:
                     alignement = alignement[1]
             else:
-                alignement = 'left'
+                alignement = "left"
 
-            if '!' in ligne_og:
+            if "!" in ligne_og:
                 isdown = True
             else:
                 isdown = False
@@ -172,6 +178,7 @@ def conversion_pos():
         )
         stations[nom_station].set_position(new_pos)
 
+
 def dessine_stations():
     global alignement
 
@@ -194,18 +201,18 @@ def dessine_stations():
             tortue.goto(pos_station)
             tortue.dot(8, "black")
 
-            if stations[nom_station].get_alignement() == 'left':
+            if stations[nom_station].get_alignement() == "left":
                 tortue.seth(0)
-            elif stations[nom_station].get_alignement() == 'right':
+            elif stations[nom_station].get_alignement() == "right":
                 tortue.seth(180)
-            elif stations[nom_station].get_alignement() == 'center':
+            elif stations[nom_station].get_alignement() == "center":
                 tortue.seth(90)
 
             if stations[nom_station].isdown():
                 tortue.seth(270)
                 tortue.forward(10)
             tortue.forward(5)
-        
+
             tortue.pencolor("black")
             tortue.write(
                 nom_station,
@@ -243,14 +250,17 @@ lignes = []
 lire_fichier_metro("reseau_metro.txt")
 conversion_pos()
 test = meilleur_chemin(
-    graphe_metro.sommet("Montmorency"), graphe_metro.sommet("Côte-Vertu"), None
+    graphe_metro.sommet("Montmorency"),
+    graphe_metro.sommet("Côte-Vertu"),
+    {"orange"},
 )
 print(test[0], test[1])
+
 
 def user_input():
     t.textinput("Où suis-je", "Où êtes-vous?: ")
 
 
 dessine_stations()
-user_input()
+# user_input()
 ecran.exitonclick()
