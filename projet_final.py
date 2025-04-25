@@ -174,7 +174,7 @@ def dessine_stations():
             )
 
 
-LARGEUR = 1400
+LARGEUR = 1500
 HAUTEUR = 750
 
 GAP_HAUTEUR = 50
