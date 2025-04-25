@@ -5,11 +5,12 @@ import math
 
 
 class Station:
-    def __init__(self, nom, lignes, position, alignement):
+    def __init__(self, nom, lignes, position, alignement, isdown):
         self._nom = nom
         self._lignes = lignes
         self._position = position
         self._alignement = alignement
+        self._isdown = isdown
 
     def get_nom(self):
         return self._nom
@@ -25,6 +26,9 @@ class Station:
 
     def get_alignement(self):
         return self._alignement
+    
+    def isdown(self):
+        return self._isdown
 
     def set_position(self, position):
         self._position = position
@@ -90,6 +94,7 @@ def lire_fichier_metro(nom_fichier):
             if ligne == "" or ligne[0] == "#":
                 continue
 
+            ligne_og = ligne
             ligne = ligne.strip()
 
             if ligne[0] == "@":
@@ -103,13 +108,26 @@ def lire_fichier_metro(nom_fichier):
             position, ligne = ligne.split(")")
             position = tuple(float(a) for a in position.split(","))
 
-            alignement = "left"
-
             connexions, couleurs = ligne.split("%")
             connexions = tuple(tuple(i.split("*")) for i in connexions.split("&"))
             couleurs = tuple(couleurs.split("$"))
 
-            stations[depart] = Station(depart, couleurs, position, alignement)
+            alignement = ligne.split("=")
+            if len(alignement) == 2:
+                alignement2 = alignement[1].split("!")
+                if len(alignement2) == 2:
+                    alignement = alignement2[0]
+                else:
+                    alignement = alignement[1]
+            else:
+                alignement = 'left'
+
+            if '!' in ligne_og:
+                isdown = True
+            else:
+                isdown = False
+
+            stations[depart] = Station(depart, couleurs, position, alignement, isdown)
 
             for connexion in connexions:
                 if len(connexion) != 2:
@@ -154,8 +172,9 @@ def conversion_pos():
         )
         stations[nom_station].set_position(new_pos)
 
-
 def dessine_stations():
+    global alignement
+
     for ligne in lignes:
         tortue = t.Turtle()
         tortue.speed(0)
@@ -174,6 +193,19 @@ def dessine_stations():
             pos_station = stations[nom_station].get_position()
             tortue.goto(pos_station)
             tortue.dot(8, "black")
+
+            if stations[nom_station].get_alignement() == 'left':
+                tortue.seth(0)
+            elif stations[nom_station].get_alignement() == 'right':
+                tortue.seth(180)
+            elif stations[nom_station].get_alignement() == 'center':
+                tortue.seth(90)
+
+            if stations[nom_station].isdown():
+                tortue.seth(270)
+                tortue.forward(10)
+            tortue.forward(5)
+        
             tortue.pencolor("black")
             tortue.write(
                 nom_station,
@@ -183,7 +215,7 @@ def dessine_stations():
             )
 
 
-LARGEUR = 1400
+LARGEUR = 1280
 HAUTEUR = 750
 
 GAP_HAUTEUR = 50
@@ -215,5 +247,10 @@ test = meilleur_chemin(
 )
 print(test[0], test[1])
 
+def user_input():
+    t.textinput("Où suis-je", "Où êtes-vous?: ")
+
+
 dessine_stations()
+user_input()
 ecran.exitonclick()
