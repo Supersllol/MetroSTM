@@ -34,7 +34,7 @@ Joliette(45.54705407604158, -73.5522483186083)Pie-IX*766.88&Préfontaine*1003.95
 Jolicoeur(45.456959918306445, -73.58191609861242)Monk*1062.85&Verdun*761.39%vert
 L'Assomption(45.56933219450834, -73.54736265583931)Cadillac*781.69&Viau*895.87%vert
 Langelier(45.58279889374338, -73.54387289689205)Cadillac*518.51&Radisson*621.79%vert
-LaSalle(45.47078387668829, -73.5659081574753)Charlevoix*707.25&De L'Église*812.30%vert
+LaSalle(45.47078387668829, -73.5659081574753)Charlevoix*707.25&De l'Église*812.30%vert
 Laurier(45.527122442329926, -73.58634959599692)Mont-Royal*932.10&Rosemont*746.10%orange
 Lionel-Groulx(45.48284553457747, -73.5801148437035)Atwater*1387.74&Charlevoix*1077.31&Georges-Vanier*758.60&Place-Saint-Henri*579.60%orange$vert
 Longueuil-Université-de-Sherbrooke(45.52486652235229, -73.52203511856905)Jean-Drapeau*1572.10%jaune
@@ -64,7 +64,7 @@ Snowdon(45.485435276656894, -73.62821843821655)Côte-Sainte-Catherine*693.00&Cô
 Square-Victoria-OACI(45.50191326408405, -73.5626759902202)Bonaventure*392.60&Place-d'Armes*356.60%orange
 Université-de-Montréal(45.50272651255283, -73.61837071097955)Côte-des-Neiges*764.60&Édouard-Montpetit*667.60%bleu
 Vendôme(45.47390294507783, -73.6043393879233)Place-Saint-Henri*1450.88&Villa-Maria*1407.32%orange
-Verdun(45.459274239361626, -73.57178397519435)De L'Église*563.86&Jolicoeur*761.39%vert
+Verdun(45.459274239361626, -73.57178397519435)De l'Église*563.86&Jolicoeur*761.39%vert
 Viau(45.56117413763484, -73.54774197751738)L'Assomption*895.87&Pie-IX*621.85%vert
 Villa-Maria(45.47957542305685, -73.62041857433667)Snowdon*884.41&Vendôme*1407.32%orange
 @jaune*Berri-UQAM*Jean-Drapeau*Longueuil-Université-de-Sherbrooke

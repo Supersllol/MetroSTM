@@ -41,17 +41,19 @@ class Ligne:
 
 def dijkstra(depart, couleurs):
     exterieur = set(graphe_metro.listeSommets())
-    dist = {s: math.inf for s in exterieur}
-    dist[depart] = 0
+    dist = {s: [math.inf, None] for s in exterieur}
+    dist[depart][0] = 0
     while len(exterieur) > 0:
         dmin = math.inf
         for s in exterieur:
-            if dist[s] < dmin:
-                (a, dmin) = (s, dist[s])
+            if dist[s][0] < dmin:
+                (a, dmin) = (s, dist[s][0])
         exterieur.remove(a)
         for b in a.listeVoisins():
             if b in exterieur:
-                dist[b] = min(dist[b], dist[a] + a.poids(b))
+                new_dist = dist[a][0] + a.poids(b)
+                if dist[b][0] > new_dist:
+                    dist[b] = (new_dist, a.__str__())
     return dist
 
 
@@ -82,7 +84,6 @@ def lire_fichier_metro(nom_fichier):
                 continue
 
             depart, ligne = ligne.split("(")
-
             position, ligne = ligne.split(")")
             position = tuple(float(a) for a in position.split(","))
 
@@ -105,7 +106,7 @@ def distance(point_a, point_b):
 
 
 def conversion_pos():
-    """Convertis les positions des stations pour être dans le référentiel de l'écran"""
+    """Convertis les positions des stations pour être dans le référentiel de l'écran."""
     # Stations plus à l'est et au nord
     maximum = (
         stations["Longueuil-Université-de-Sherbrooke"].get_position()[1],
@@ -150,12 +151,12 @@ def dessine_stations():
             tortue.goto(pos_station)
             tortue.pendown()
         tortue.penup()
+        tortue.pencolor("black")
         for nom_station in ligne.get_ordre_stations():
             pos_station = stations[nom_station].get_position()
             tortue.goto(pos_station)
-            tortue.dot(8, "black")
-            tortue.pencolor("black")
-            tortue.write(nom_station, font=("Arial", 10, "normal"))
+            tortue.dot(8)
+            tortue.write(nom_station, align="center", font=("Arial", 10, "normal"))
 
 
 LARGEUR = 1200
@@ -181,6 +182,8 @@ lignes = []
 
 lire_fichier_metro("reseau_metro.txt")
 conversion_pos()
+resultat = dijkstra(graphe_metro.sommet("Montmorency"), None)
+print(list((som.__str__(), res[0], res[1]) for som, res in resultat.items()))
 
 dessine_stations()
 ecran.exitonclick()
