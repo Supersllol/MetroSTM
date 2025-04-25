@@ -1,20 +1,20 @@
 from graphelib import Graphe
 from pilefile import Pile, File
 import turtle as t
-import ordre_stations as ord
+import math
 
 
 class Station:
-    def __init__(self, nom, ligne, position):
+    def __init__(self, nom, lignes, position):
         self._nom = nom
-        self._ligne = ligne
+        self._lignes = lignes
         self._position = position
 
     def get_nom(self):
         return self._nom
 
     def get_ligne(self):
-        return self._ligne
+        return self._lignes
 
     def get_position(self):
         return self._position
@@ -39,17 +39,47 @@ class Ligne:
         return self._ordre_stations
 
 
-def lire_fichier_metro(nom_fichier):
-    """Lis le fichier contenant l'information sur le réseau de métro, en construisant un
-    graphe reliant les stations avec les distances entre elles, et en créant des stations
-    avec leurs position et leur(s) couleur(s)
+def dijkstra(depart, couleurs):
+    exterieur = set(graphe_metro.listeSommets())
+    dist = {s: math.inf for s in exterieur}
+    dist[depart] = 0
+    while len(exterieur) > 0:
+        dmin = math.inf
+        for s in exterieur:
+            if dist[s] < dmin:
+                (a, dmin) = (s, dist[s])
+        exterieur.remove(a)
+        for b in a.listeVoisins():
+            if b in exterieur:
+                dist[b] = min(dist[b], dist[a] + a.poids(b))
+    return dist
+
+
+def meilleur_chemin(depart, arrivee, couleurs):
+    """Retourne le chemin le plus court entre la station d'arrivée et de départ,
+    en passant seulement par les stations des couleurs passées en paramètre.
     """
-    g = Graphe(False)
+
+
+def lire_fichier_metro(nom_fichier):
+    """Lis le fichier contenant l'information sur le réseau de métro. Construit un
+    graphe reliant les stations avec les distances entre elles, crée des stations
+    avec leurs position et leur(s) couleur(s), et initialise les lignes de métro
+    avec les stations dans le bon ordre.
+    """
     with open(nom_fichier, "r", encoding="utf8") as fp:
         for ligne in fp:
             if ligne == "" or ligne[0] == "#":
                 continue
+
             ligne = ligne.strip()
+
+            if ligne[0] == "@":
+                ligne = ligne[1:]
+                ligne = ligne.split("*")
+                nom = ligne[0]
+                lignes.append(Ligne(nom, couleurs_lignes[nom], ligne[1:]))
+                continue
 
             depart, ligne = ligne.split("(")
 
@@ -65,10 +95,8 @@ def lire_fichier_metro(nom_fichier):
             for connexion in connexions:
                 if len(connexion) != 2:
                     continue
-
                 (station, distance) = connexion
-                g.ajouteArete(depart, station, distance)
-    return g
+                graphe_metro.ajouteArete(depart, station, float(distance))
 
 
 def distance(point_a, point_b):
@@ -140,35 +168,19 @@ ecran = t.Screen()
 ecran.title("Métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 ecran.bgcolor("#87CEEB")
+couleurs_lignes = {
+    "jaune": "yellow",
+    "verte": "green",
+    "bleue": "blue",
+    "orange": "orange",
+}
 
 stations = {}
-graphe_metro = lire_fichier_metro("reseau_metro.txt")
+graphe_metro = Graphe(False)
+lignes = []
 
-
-lignes = [
-    Ligne(
-        "jaune",
-        "yellow",
-        ord.ordre_jaune,
-    ),
-    Ligne(
-        "orange",
-        "orange",
-        ord.ordre_orange,
-    ),
-    Ligne(
-        "verte",
-        "green",
-        ord.ordre_verte,
-    ),
-    Ligne(
-        "bleue",
-        "blue",
-        ord.ordre_bleue,
-    ),
-]
-
+lire_fichier_metro("reseau_metro.txt")
 conversion_pos()
-dessine_stations()
 
+dessine_stations()
 ecran.exitonclick()
