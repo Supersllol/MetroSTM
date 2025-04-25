@@ -94,7 +94,7 @@ def lire_fichier_metro(nom_fichier):
             position, ligne = ligne.split(")")
             position = tuple(float(a) for a in position.split(","))
 
-            alignement = "center"
+            alignement = "left"
 
             connexions, couleurs = ligne.split("%")
             connexions = tuple(tuple(i.split("*")) for i in connexions.split("&"))
@@ -170,7 +170,7 @@ def dessine_stations():
                 nom_station,
                 False,
                 align=stations[nom_station].get_alignement(),
-                font=("Arial", 10, "bold"),
+                font=("Arial", 8, "bold"),
             )
 
 
