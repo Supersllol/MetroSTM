@@ -5,10 +5,11 @@ import math
 
 
 class Station:
-    def __init__(self, nom, lignes, position):
+    def __init__(self, nom, lignes, position, alignement):
         self._nom = nom
         self._lignes = lignes
         self._position = position
+        self._alignement = alignement
 
     def get_nom(self):
         return self._nom
@@ -18,6 +19,12 @@ class Station:
 
     def get_position(self):
         return self._position
+
+    def get_alignement(self):
+        return self._alignement
+
+    def get_alignement(self):
+        return self._alignement
 
     def set_position(self, position):
         self._position = position
@@ -87,11 +94,13 @@ def lire_fichier_metro(nom_fichier):
             position, ligne = ligne.split(")")
             position = tuple(float(a) for a in position.split(","))
 
+            alignement = "center"
+
             connexions, couleurs = ligne.split("%")
             connexions = tuple(tuple(i.split("*")) for i in connexions.split("&"))
             couleurs = tuple(couleurs.split("$"))
 
-            stations[depart] = Station(depart, couleurs, position)
+            stations[depart] = Station(depart, couleurs, position, alignement)
 
             for connexion in connexions:
                 if len(connexion) != 2:
@@ -155,25 +164,35 @@ def dessine_stations():
         for nom_station in ligne.get_ordre_stations():
             pos_station = stations[nom_station].get_position()
             tortue.goto(pos_station)
-            tortue.dot(8)
-            tortue.write(nom_station, align="center", font=("Arial", 10, "normal"))
+            tortue.dot(8, "black")
+            tortue.pencolor("black")
+            tortue.write(
+                nom_station,
+                False,
+                align=stations[nom_station].get_alignement(),
+                font=("Arial", 10, "bold"),
+            )
 
 
-LARGEUR = 1200
+LARGEUR = 1400
 HAUTEUR = 750
 
 GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
 
 ecran = t.Screen()
-ecran.title("Métro de Montréal")
+ecran.title("Métro de la SDF")
 ecran.setup(LARGEUR, HAUTEUR)
-ecran.bgcolor("#87CEEB")
+ecran.bgcolor("#D7E7F6")
+# couleur lac: #07426f
+# au besoin...
+# gris foncé: #2b2b2b
+# gris pâle: #666666
 couleurs_lignes = {
-    "jaune": "yellow",
-    "verte": "green",
-    "bleue": "blue",
-    "orange": "orange",
+    "jaune": "#FCD205",
+    "verte": "#01A852",
+    "bleue": "#1182CE",
+    "orange": "#F47416",
 }
 
 stations = {}
