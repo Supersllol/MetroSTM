@@ -204,5 +204,10 @@ conversion_pos()
 resultat = dijkstra(graphe_metro.sommet("Montmorency"), None)
 print(list((som.__str__(), res[0], res[1]) for som, res in resultat.items()))
 
+def user_input():
+    t.textinput("Où suis-je", "Où êtes-vous?: ")
+
+
 dessine_stations()
+user_input()
 ecran.exitonclick()
