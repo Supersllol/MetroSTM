@@ -88,13 +88,13 @@ def meilleur_chemin(depart, arrivee, couleurs):
     return (chemin, distance)
 
 
-def lire_fichier_metro(nom_fichier):
+def lire_fichier_metro():
     """Lis le fichier contenant l'information sur le réseau de métro. Construit un
     graphe reliant les stations avec les distances entre elles, crée des stations
     avec leurs position et leur(s) couleur(s), et initialise les lignes de métro
     avec les stations dans le bon ordre.
     """
-    with open(nom_fichier, "r", encoding="utf8") as fp:
+    with open("reseau_metro.txt", "r", encoding="utf8") as fp:
         for ligne in fp:
             if ligne == "" or ligne[0] == "#":
                 continue
@@ -142,13 +142,34 @@ def lire_fichier_metro(nom_fichier):
                 graphe_metro.ajouteArete(depart, station, float(distance))
 
 
+def lire_fichier_ile():
+    with open("coord_ile.txt", "r", encoding="utf8") as fp:
+        current = []
+        for ligne in fp:
+            if ligne == "" or ligne[0] == "#":
+                continue
+            ligne = ligne.strip()
+
+            if ligne[0] == "*":
+                ligne = ligne[1:]
+                ile.append(tuple(float(coord) for coord in ligne.split(",")))
+                continue
+
+            if ligne[0] == "-":
+                lacs.append(current)
+                current = []
+                continue
+
+            current.append(tuple(float(coord) for coord in ligne.split(",")))
+
+
 def distance(point_a, point_b):
     """Prends deux tuples et retourne la distance entre les deux points"""
     return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
 
 
 def conversion_pos():
-    """Convertis les positions des stations pour être dans le référentiel de l'écran."""
+    """Convertis les coordonnées géographiques pour être dans le référentiel de l'écran."""
     # Stations plus à l'est et au nord
     maximum = (
         stations["Longueuil-Université-de-Sherbrooke"].get_position()[1],
@@ -178,10 +199,21 @@ def conversion_pos():
         )
         stations[nom_station].set_position(new_pos)
 
+    for lac in lacs:
+        for j in range(len(lac)):
+            lac[j] = (
+                (lac[j][1] - point_zero[0]) * ratio,
+                (lac[j][0] - point_zero[1]) * ratio,
+            )
+
+    for i in range(len(ile)):
+        ile[i] = (
+            (ile[i][1] - point_zero[0]) * ratio,
+            (ile[i][0] - point_zero[1]) * ratio,
+        )
+
 
 def dessine_stations():
-    global alignement
-
     for ligne in lignes:
         tortue = t.Turtle()
         tortue.speed(0)
@@ -222,20 +254,53 @@ def dessine_stations():
             )
 
 
+def dessine_lacs():
+    tortue = t.Turtle()
+    tortue.hideturtle()
+    tortue.speed(0)
+    tortue.color(COULEUR_LACS)
+    for lac in lacs:
+        tortue.begin_fill()
+        tortue.penup()
+        for pos in lac:
+            tortue.goto(pos)
+            tortue.pendown()
+        tortue.end_fill()
+
+
+def dessine_ile():
+    tortue = t.Turtle()
+    tortue.hideturtle()
+    tortue.speed(0)
+    tortue.color(COULEUR_TERRE)
+    tortue.begin_fill()
+    tortue.penup()
+    for pos in ile:
+        tortue.goto(pos)
+        tortue.pendown()
+    tortue.end_fill()
+
+
+def user_input():
+    t.textinput("Où suis-je", "Où êtes-vous?: ")
+
+
 LARGEUR = 1280
 HAUTEUR = 750
 
 GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
 
-ecran = t.Screen()
-ecran.title("Métro de la SDF")
-ecran.setup(LARGEUR, HAUTEUR)
-ecran.bgcolor("#D7E7F6")
-# couleur lac: #07426f
+COULEUR_LACS = "#07426F"
+COULEUR_TERRE = "#D7E7F6"
 # au besoin...
 # gris foncé: #2b2b2b
 # gris pâle: #666666
+
+ecran = t.Screen()
+ecran.title("Métro de la SDF")
+ecran.setup(LARGEUR, HAUTEUR)
+ecran.bgcolor(COULEUR_TERRE)
 couleurs_lignes = {
     "jaune": "#FCD205",
     "verte": "#01A852",
@@ -246,21 +311,21 @@ couleurs_lignes = {
 stations = {}
 graphe_metro = Graphe(False)
 lignes = []
+lacs = []
+ile = []
 
-lire_fichier_metro("reseau_metro.txt")
+lire_fichier_metro()
+lire_fichier_ile()
 conversion_pos()
-test = meilleur_chemin(
-    graphe_metro.sommet("Montmorency"),
-    graphe_metro.sommet("Côte-Vertu"),
-    {"orange"},
-)
-print(test[0], test[1])
 
+# test = meilleur_chemin(
+#     graphe_metro.sommet("Montmorency"),
+#     graphe_metro.sommet("Côte-Vertu"),
+#     {"orange"},
+# )
+# print(test[0], test[1])
 
-def user_input():
-    t.textinput("Où suis-je", "Où êtes-vous?: ")
-
-
+dessine_lacs()
+dessine_ile()
 dessine_stations()
-# user_input()
 ecran.exitonclick()
