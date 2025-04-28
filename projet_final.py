@@ -2,6 +2,7 @@ from graphelib import Graphe
 from pilefile import Pile, File
 import turtle as t
 import math
+import time
 
 
 class Station:
@@ -32,6 +33,9 @@ class Station:
 
     def set_position(self, position):
         self._position = position
+
+    def __str__(self):
+        return self.get_nom()
 
 
 class Ligne:
@@ -281,6 +285,34 @@ def dessine_ile():
     tortue.end_fill()
 
 
+def choix_station(x, y):
+    """Retourne la station qui correspond à l'endroit cliqué (ou None si aucune)"""
+    for station in stations.values():
+        pos = station.get_position()
+        if (pos[0] - RAYON_CLIC <= x <= pos[0] + RAYON_CLIC) and (
+            pos[1] - RAYON_CLIC <= y <= pos[1] + RAYON_CLIC
+        ):
+            global choix_arrivee
+            tortue_arrivee.hideturtle()
+            tortue_arrivee.goto(pos)
+            tortue_arrivee.showturtle()
+            choix_arrivee = station
+            return station
+
+    return None
+
+
+def clic(x, y):
+    print(time.time_ns())
+    choix_station(x, y)
+    print(time.time_ns())
+    print(choix_arrivee)
+
+
+def dessine_user_input():
+    pass
+
+
 def user_input():
     t.textinput("Où suis-je", "Où êtes-vous?: ")
 
@@ -296,6 +328,8 @@ COULEUR_TERRE = "#D7E7F6"
 # au besoin...
 # gris foncé: #2b2b2b
 # gris pâle: #666666
+
+RAYON_CLIC = 6
 
 ecran = t.Screen()
 ecran.title("Métro de la SDF")
@@ -314,6 +348,15 @@ lignes = []
 lacs = []
 ile = []
 
+choix_arrivee = None
+tortue_arrivee = t.Turtle(shape="circle")
+tortue_arrivee.shapesize(0.5)
+tortue_arrivee.speed(0)
+tortue_arrivee.penup()
+tortue_arrivee.color("red")
+tortue_arrivee.hideturtle()
+
+
 lire_fichier_metro()
 lire_fichier_ile()
 conversion_pos()
@@ -328,4 +371,7 @@ conversion_pos()
 dessine_lacs()
 dessine_ile()
 dessine_stations()
-ecran.exitonclick()
+
+ecran.listen()
+ecran.onscreenclick(clic)
+ecran.mainloop()
