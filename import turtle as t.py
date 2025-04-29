@@ -12,7 +12,6 @@ player.penup()
 player.shape("ami_1.gif")
 
 time.sleep(2)
-player.showturtle
 player.forward(200)
 
 # Bouger le personnage
