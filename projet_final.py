@@ -364,7 +364,23 @@ def texte_depart_arrivee():
 
 
 def user_input():
-    t.textinput("Où suis-je", "Où êtes-vous?: ")
+
+    while True:
+        reponse = t.textinput("Où suis-je", "Où êtes-vous? (x,y): ")
+        parties = reponse.split(",")
+        if len(parties) == 2:
+            try:
+                x = int(parties[0].strip())
+                y = int(parties[1].strip())
+                if 0 <= x <= 1280 and 0 <= y <= 750:
+                    return (x, y)
+                else:
+                    print("Les coordonnées doivent être dans les limites 0-1280 pour x et 0-750 pour y.")
+            except ValueError:
+                print("Veuillez entrer deux nombres entiers séparés par une virgule.")
+        else:
+            print("Veuillez entrer deux nombres séparés par une virgule.")
+
 
 '''
 Le Métro
