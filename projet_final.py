@@ -366,6 +366,9 @@ def texte_depart_arrivee():
 def user_input():
     t.textinput("Où suis-je", "Où êtes-vous?: ")
 
+'''
+Le Métro
+'''
 
 LARGEUR = 1280
 HAUTEUR = 750
@@ -381,12 +384,10 @@ POS_BOUTON_DEPART = (
     POS_TEXTE_DEPART[1] + TAILLE_BOUTON_DEPART / 1.125,
 )
 
-
 COULEUR_LACS = "#07426F"
 COULEUR_TERRE = "#D7E7F6"
 
 RAYON_CLIC = 6
-
 
 ecran = t.Screen()
 ecran.title("Métro de la SDF")
@@ -399,6 +400,9 @@ couleurs_lignes = {
     "orange": "#F47416",
 }
 
+# allo2 comme gif de personnage
+t.register_shape("ami_1.gif")
+
 stations = {}
 graphe_metro = Graphe(False)
 lignes = []
@@ -407,15 +411,25 @@ ile = []
 
 choix_arrivee = None
 choix_depart = None
+
+# code pour générer le personnage
+#t.register_shape("ami_1.gif")
+
+#player = t.Turtle()
+#player.hideturtle
+#player.penup()
+#player.shape("ami_1.gif")
+
 tortue_depart_arrivee = t.Turtle()
 tortue_depart_arrivee.hideturtle()
 tortue_depart_arrivee.penup()
+tortue_depart_arrivee.shape("ami_1.gif")
 
 tortue_cercle_arrivee = t.Turtle(shape="circle")
 tortue_cercle_arrivee.shapesize(0.5)
 tortue_cercle_arrivee.speed(0)
 tortue_cercle_arrivee.penup()
-tortue_cercle_arrivee.color("red")
+tortue_cercle_arrivee.color("aqua")
 tortue_cercle_arrivee.hideturtle()
 
 lire_fichier_metro()
