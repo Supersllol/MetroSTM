@@ -66,6 +66,7 @@ def dijkstra(depart, couleurs):
     )
     # Algorithme de Dijkstra, mais en gardant en mémoire la station précédente
     dist = {s: [math.inf, None] for s in exterieur}
+    print(depart)
     dist[depart][0] = 0
     while len(exterieur) > 0:
         dmin = math.inf
@@ -421,6 +422,13 @@ tortue_cercle_arrivee.hideturtle()
 lire_fichier_metro()
 lire_fichier_ile()
 conversion_pos()
+
+# test = meilleur_chemin(
+#     graphe_metro.sommet("Honoré-Beaugrand"),
+#     graphe_metro.sommet("Côte-Vertu"),
+#     {"orange", "verte", "bleue"},
+# )
+# print(test[0], test[1])
 
 dessine_lacs()
 dessine_ile()
