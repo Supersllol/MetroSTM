@@ -69,5 +69,5 @@ Viau(45.56117413763484, -73.54774197751738)L'Assomption*895.87&Pie-IX*621.85%ver
 Villa-Maria(45.47957542305685, -73.62041857433667)Snowdon*884.41&Vendôme*1407.32%orange
 @jaune*Berri-UQAM*Jean-Drapeau*Longueuil-Université-de-Sherbrooke
 @bleue*Snowdon*Côte-des-Neiges*Université-de-Montréal*Édouard-Montpetit*Outremont*Acadie*Parc*De Castelnau*Jean-Talon*Fabre*D'Iberville*Saint-Michel
-@verte*Angrignon*Monk*Jolicoeur*Verdun*De l'Église*LaSalle*Charlevoix*Lionel-Groulx*Atwater*Guy-Concordia*Peel*McGill*Place-des-Arts*Berri-UQAM*Beaudry*Papineau*Frontenac*Préfontaine*Joliette*Pie-IX*Viau*L'Assomption*Cadillac*Langelier*Radisson*Honoré-Beaugrand
+@verte*Angrignon*Monk*Jolicoeur*Verdun*De l'Église*LaSalle*Charlevoix*Lionel-Groulx*Atwater*Guy-Concordia*Peel*McGill*Place-des-Arts*Saint-Laurent*Berri-UQAM*Beaudry*Papineau*Frontenac*Préfontaine*Joliette*Pie-IX*Viau*L'Assomption*Cadillac*Langelier*Radisson*Honoré-Beaugrand
 @orange*Côte-Vertu*Du Collège*De la Savane*Namur*Plamondon*Côte-Sainte-Catherine*Snowdon*Villa-Maria*Vendôme*Place-Saint-Henri*Lionel-Groulx*Georges-Vanier*Lucien-L'Allier*Bonaventure*Square-Victoria-OACI*Place-d'Armes*Champ-de-Mars*Berri-UQAM*Sherbrooke*Mont-Royal*Laurier*Rosemont*Beaubien*Jean-Talon*Jarry*Crémazie*Sauvé*Henri-Bourassa*Cartier*De la Concorde*Montmorency

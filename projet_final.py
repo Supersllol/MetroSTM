@@ -55,12 +55,16 @@ class Ligne:
 
 
 def dijkstra(depart, couleurs):
+    """Retourne un dictionnaire contenant les distances les plus courtes
+    à partir du point de départ pour se rendre à chaque station en passant
+    seulement par les stations de couleurs passées en paramètre"""
+    # Seulement utiliser les stations des couleurs passées en paramètre
     exterieur = set(
         station
         for station in graphe_metro.listeSommets()
         if (stations[station.__str__()].get_couleurs() & couleurs) != set()
     )
-
+    # Algorithme de Dijkstra, mais en gardant en mémoire la station précédente
     dist = {s: [math.inf, None] for s in exterieur}
     dist[depart][0] = 0
     while len(exterieur) > 0:
@@ -82,9 +86,10 @@ def meilleur_chemin(depart, arrivee, couleurs):
     sous la forme d'une pile, en passant seulement par les stations des couleurs
     passées en paramètre. Retourne un tuple avec la pile et la distance.
     """
-    chemin = Pile()
     dist = dijkstra(depart, couleurs)
+    # Refaire le chemin à l'envers en empilant les précédentes
     distance, precedent = dist[arrivee]
+    chemin = Pile()
     chemin.empile(arrivee)
     while precedent != None:
         chemin.empile(precedent)
@@ -105,7 +110,7 @@ def lire_fichier_metro():
 
             ligne_og = ligne
             ligne = ligne.strip()
-
+            # Ordre des stations si commence par @
             if ligne[0] == "@":
                 ligne = ligne[1:]
                 ligne = ligne.split("*")
@@ -147,24 +152,25 @@ def lire_fichier_metro():
 
 
 def lire_fichier_ile():
+    """Lis le fichier contenant les coordonnées de l'ile à dessiner"""
     with open("coord_ile.txt", "r", encoding="utf8") as fp:
-        current = []
+        courante = []
         for ligne in fp:
             if ligne == "" or ligne[0] == "#":
                 continue
             ligne = ligne.strip()
-
+            # Rajouter la coordonnée à l'ile courante
             if ligne[0] == "*":
                 ligne = ligne[1:]
                 ile.append(tuple(float(coord) for coord in ligne.split(",")))
                 continue
-
+            # Changer d'ile
             if ligne[0] == "-":
-                lacs.append(current)
-                current = []
+                lacs.append(courante)
+                courante = []
                 continue
 
-            current.append(tuple(float(coord) for coord in ligne.split(",")))
+            courante.append(tuple(float(coord) for coord in ligne.split(",")))
 
 
 def distance(point_a, point_b):
@@ -186,15 +192,22 @@ def conversion_pos():
         stations["Angrignon"].get_position()[0],
     )
 
+    # Calculer la différence entre le max et le min
     delta = (abs(maximum[0] - minimum[0]), abs(maximum[1] - minimum[1]))
+    # Point qui va devenir le (0, 0) sur l'écran
     point_zero = (minimum[0] + delta[0] / 2, minimum[1] + delta[1] / 2)
 
+    # Plus large que haut
     if delta[0] / delta[1] >= LARGEUR / HAUTEUR:
-        # Plus large que haut
+        # Ratio est en pixel / unité de coordonnée géographique (degré)
+        # On utilise la hauteur de l'écran et on la divise par le delta pour occuper
+        # toute la hauteur
         ratio = (LARGEUR / 2 - GAP_LARGEUR) / (delta[0] / 2)
     else:
         ratio = (HAUTEUR / 2 - GAP_HAUTEUR) / (delta[1] / 2)
 
+    # Différence avec le nouveau point (0, 0) * ratio donne la nouvelle coord
+    # Même chose pour stations, lacs et iles
     for nom_station in stations.keys():
         pos = stations[nom_station].get_position()
         new_pos = (
@@ -218,7 +231,10 @@ def conversion_pos():
 
 
 def dessine_stations():
+    """Dessine les stations et les lignes de métro avec leurs noms
+    sur l'écran"""
     for ligne in lignes:
+        t.tracer(1, 3)
         tortue = t.Turtle()
         tortue.speed(0)
         line_color = ligne.get_couleur()
@@ -226,17 +242,20 @@ def dessine_stations():
         tortue.pensize(3)
         tortue.hideturtle()
         tortue.penup()
+        # Tracer la ligne en suivant l'ordre des stations
         for nom_station in ligne.get_ordre_stations():
             pos_station = stations[nom_station].get_position()
             tortue.goto(pos_station)
             tortue.pendown()
         tortue.penup()
         tortue.pencolor("black")
+        t.tracer(1, 0)
+        # Tracer les stations avec un point et son nom
         for nom_station in ligne.get_ordre_stations():
             pos_station = stations[nom_station].get_position()
             tortue.goto(pos_station)
             tortue.dot(8, "black")
-
+            # Alignement du nom
             if stations[nom_station].get_alignement() == "left":
                 tortue.seth(0)
             elif stations[nom_station].get_alignement() == "right":
@@ -259,10 +278,12 @@ def dessine_stations():
 
 
 def dessine_lacs():
+    """Dessine les lacs sur l'écran"""
     tortue = t.Turtle()
     tortue.hideturtle()
     tortue.speed(0)
     tortue.color(COULEUR_LACS)
+    # Remplis les lacs en utilisant les coordonnées du fichier
     for lac in lacs:
         tortue.begin_fill()
         tortue.penup()
@@ -273,6 +294,7 @@ def dessine_lacs():
 
 
 def dessine_ile():
+    """Dessine l'ile St-Hélène pour la station Jean-Drapeau"""
     tortue = t.Turtle()
     tortue.hideturtle()
     tortue.speed(0)
@@ -285,32 +307,60 @@ def dessine_ile():
     tortue.end_fill()
 
 
+def dessine_bouton_depart():
+    """Dessine le bouton servant à choisir la position de départ"""
+    tortue = t.Turtle()
+    tortue.hideturtle()
+    tortue.penup()
+    tortue.goto(POS_BOUTON_DEPART)
+    tortue.color("#808080")
+    tortue.begin_fill()
+    tortue.setheading(0)
+    for i in range(4):
+        tortue.forward(TAILLE_BOUTON_DEPART)
+        tortue.right(90)
+    tortue.end_fill()
+
+
 def choix_station(x, y):
     """Retourne la station qui correspond à l'endroit cliqué (ou None si aucune)"""
     for station in stations.values():
         pos = station.get_position()
+        # Si les coordonnées du clic se situent dans un rectangle autour de la station
         if (pos[0] - RAYON_CLIC <= x <= pos[0] + RAYON_CLIC) and (
             pos[1] - RAYON_CLIC <= y <= pos[1] + RAYON_CLIC
         ):
             global choix_arrivee
-            tortue_arrivee.hideturtle()
-            tortue_arrivee.goto(pos)
-            tortue_arrivee.showturtle()
+            t.tracer(1, 3)
+            tortue_cercle_arrivee.goto(pos)
+            tortue_cercle_arrivee.showturtle()
             choix_arrivee = station
+            texte_depart_arrivee()
             return station
 
     return None
 
 
 def clic(x, y):
-    print(time.time_ns())
+    """Gère les cas possibles lorsque l'usager clique sur l'écran"""
+    # Si clique bouton pour faire apparaître le choix de départ
+    if (POS_BOUTON_DEPART[0] <= x <= POS_BOUTON_DEPART[0] + TAILLE_BOUTON_DEPART) and (
+        POS_BOUTON_DEPART[1] - TAILLE_BOUTON_DEPART <= y <= POS_BOUTON_DEPART[1]
+    ):
+        user_input()
+        return
+
     choix_station(x, y)
-    print(time.time_ns())
-    print(choix_arrivee)
 
 
-def dessine_user_input():
-    pass
+def texte_depart_arrivee():
+    """Affiche à l'écran les choix de station de départ et d'arrivée"""
+    t.tracer(0)
+    tortue_depart_arrivee.clear()
+    tortue_depart_arrivee.goto(POS_TEXTE_DEPART)
+    tortue_depart_arrivee.write(f"Départ: {choix_depart}", font=("Arial", 8, "bold"))
+    tortue_depart_arrivee.goto(POS_TEXTE_ARRIVEE)
+    tortue_depart_arrivee.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
 
 
 def user_input():
@@ -323,13 +373,20 @@ HAUTEUR = 750
 GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
 
+POS_TEXTE_DEPART = (-(LARGEUR / 2) + GAP_LARGEUR * 2, -HAUTEUR / 6)
+POS_TEXTE_ARRIVEE = (-(LARGEUR / 2) + GAP_LARGEUR * 2, -HAUTEUR / 5)
+TAILLE_BOUTON_DEPART = GAP_LARGEUR / 3
+POS_BOUTON_DEPART = (
+    POS_TEXTE_DEPART[0] - GAP_LARGEUR / 2,
+    POS_TEXTE_DEPART[1] + TAILLE_BOUTON_DEPART / 1.125,
+)
+
+
 COULEUR_LACS = "#07426F"
 COULEUR_TERRE = "#D7E7F6"
-# au besoin...
-# gris foncé: #2b2b2b
-# gris pâle: #666666
 
 RAYON_CLIC = 6
+
 
 ecran = t.Screen()
 ecran.title("Métro de la SDF")
@@ -349,28 +406,27 @@ lacs = []
 ile = []
 
 choix_arrivee = None
-tortue_arrivee = t.Turtle(shape="circle")
-tortue_arrivee.shapesize(0.5)
-tortue_arrivee.speed(0)
-tortue_arrivee.penup()
-tortue_arrivee.color("red")
-tortue_arrivee.hideturtle()
+choix_depart = None
+tortue_depart_arrivee = t.Turtle()
+tortue_depart_arrivee.hideturtle()
+tortue_depart_arrivee.penup()
 
+tortue_cercle_arrivee = t.Turtle(shape="circle")
+tortue_cercle_arrivee.shapesize(0.5)
+tortue_cercle_arrivee.speed(0)
+tortue_cercle_arrivee.penup()
+tortue_cercle_arrivee.color("red")
+tortue_cercle_arrivee.hideturtle()
 
 lire_fichier_metro()
 lire_fichier_ile()
 conversion_pos()
 
-# test = meilleur_chemin(
-#     graphe_metro.sommet("Montmorency"),
-#     graphe_metro.sommet("Côte-Vertu"),
-#     {"orange"},
-# )
-# print(test[0], test[1])
-
 dessine_lacs()
 dessine_ile()
 dessine_stations()
+texte_depart_arrivee()
+dessine_bouton_depart()
 
 ecran.listen()
 ecran.onscreenclick(clic)
