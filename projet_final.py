@@ -507,8 +507,8 @@ couleurs_lignes = {
     "orange": "#F47416",
 }
 
-# allo2 comme gif de personnage
-t.register_shape("ami_1.gif")
+# ami_2 comme gif de personnage
+t.register_shape("ami_2.gif")
 
 stations = {}
 graphe_metro = Graphe(False)
@@ -521,17 +521,17 @@ choix_arrivee = None
 choix_depart = None
 
 # code pour générer le personnage
-# t.register_shape("ami_1.gif")
+# t.register_shape("ami_2.gif")
 
 # player = t.Turtle()
 # player.hideturtle
 # player.penup()
-# player.shape("ami_1.gif")
+# player.shape("ami_2.gif")
 
 tortue_depart_arrivee = t.Turtle()
 tortue_depart_arrivee.hideturtle()
 tortue_depart_arrivee.penup()
-tortue_depart_arrivee.shape("ami_1.gif")
+tortue_depart_arrivee.shape("ami_2.gif")
 
 tortue_cercle_arrivee = t.Turtle(shape="circle")
 tortue_cercle_arrivee.shapesize(0.5)
