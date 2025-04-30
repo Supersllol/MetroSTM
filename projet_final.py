@@ -362,6 +362,18 @@ def dessine_bouton_generer():
     tortue.goto(POS_TEXTE_GENERER)
     tortue.write("Générer", font=("Arial", 8, "bold"))
 
+def dessine_animations(liste_de_positions):
+    """Dessine le chemin à faire selon une liste de position"""
+    anim = t.Turtle()
+    anim.hideturtle()
+    anim.color('#056cf1')
+    anim.penup()
+    anim.pensize(5)
+    anim.goto(liste_de_positions[0])
+    anim.pendown()
+    
+    for position in range(len(liste_de_positions)):
+        anim.goto(liste_de_positions[position])
 
 def choix_station(x, y):
     """Retourne la station qui correspond à l'endroit cliqué (ou None si aucune)"""
@@ -546,12 +558,17 @@ conversion_pos()
 # )
 # print(test[0], test[1])
 
+l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
+dessine_animations(l)
+
+
 dessine_lacs()
 dessine_ile()
 dessine_stations()
 texte_depart_arrivee()
 dessine_bouton_depart()
 dessine_bouton_generer()
+
 
 ecran.listen()
 ecran.onscreenclick(clic)
