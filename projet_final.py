@@ -440,6 +440,18 @@ def dessine_bouton_generer():
     tortue.goto(POS_TEXTE_GENERER)
     tortue.write("Générer", font=("Arial", 8, "bold"))
 
+def dessine_animations(liste_de_positions):
+    """Dessine le chemin à faire selon une liste de position"""
+    anim = t.Turtle()
+    anim.hideturtle()
+    anim.color('#056cf1')
+    anim.penup()
+    anim.pensize(5)
+    anim.goto(liste_de_positions[0])
+    anim.pendown()
+    
+    for position in range(len(liste_de_positions)):
+        anim.goto(liste_de_positions[position])
 
 def choix_station(x, y):
     """Retourne la station qui correspond à l'endroit cliqué (ou None si aucune)"""
@@ -576,8 +588,8 @@ couleurs_lignes = {
     "orange": "#F47416",
 }
 
-# allo2 comme gif de personnage
-t.register_shape("ami_1.gif")
+# ami_2 comme gif de personnage
+t.register_shape("ami_2.gif")
 
 stations = {}
 graphe_metro = Graphe(False)
@@ -591,17 +603,17 @@ choix_arrivee = None
 choix_depart = None
 
 # code pour générer le personnage
-# t.register_shape("ami_1.gif")
+# t.register_shape("ami_2.gif")
 
 # player = t.Turtle()
 # player.hideturtle
 # player.penup()
-# player.shape("ami_1.gif")
+# player.shape("ami_2.gif")
 
 tortue_depart_arrivee = t.Turtle()
 tortue_depart_arrivee.hideturtle()
 tortue_depart_arrivee.penup()
-tortue_depart_arrivee.shape("ami_1.gif")
+tortue_depart_arrivee.shape("ami_2.gif")
 
 tortue_cercle_arrivee = t.Turtle(shape="circle")
 tortue_cercle_arrivee.shapesize(0.5)
@@ -628,12 +640,17 @@ conversion_pos()
 # )
 # print(test[0], test[1])
 
+l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
+dessine_animations(l)
+
+
 dessine_lacs()
 dessine_ile()
 dessine_stations()
 texte_depart_arrivee()
 dessine_bouton_depart()
 dessine_bouton_generer()
+
 
 ecran.listen()
 ecran.onscreenclick(clic)
