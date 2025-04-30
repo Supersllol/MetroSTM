@@ -98,6 +98,24 @@ def meilleur_chemin(depart, arrivee, couleurs):
     return (chemin, distance)
 
 
+def station_plus_proche(point):
+    """Retourne la station la plus proche du point, avec la distance avec celle-ci"""
+    best_station, best_dist = None, math.inf
+    for station in stations.values():
+        dist = distance(station.get_position(), point)
+        if dist < best_dist:
+            best_station = station
+            best_dist = dist
+    return (best_station, best_dist)
+
+
+def generer_trajets():
+    if choix_depart == None or choix_arrivee == None:
+        return
+    trajets = []
+    depart, dist_depart = station_plus_proche(choix_depart)
+
+
 def lire_fichier_metro():
     """Lis le fichier contenant l'information sur le réseau de métro. Construit un
     graphe reliant les stations avec les distances entre elles, crée des stations
@@ -230,6 +248,8 @@ def conversion_pos():
             (ile[i][0] - point_zero[1]) * ratio,
         )
 
+    # Trouver le ratio pour convertir des pixels en mètres
+
 
 def dessine_stations():
     """Dessine les stations et les lignes de métro avec leurs noms
@@ -314,13 +334,33 @@ def dessine_bouton_depart():
     tortue.hideturtle()
     tortue.penup()
     tortue.goto(POS_BOUTON_DEPART)
-    tortue.color("#808080")
+    tortue.color("red")
     tortue.begin_fill()
     tortue.setheading(0)
     for i in range(4):
         tortue.forward(TAILLE_BOUTON_DEPART)
         tortue.right(90)
     tortue.end_fill()
+
+
+def dessine_bouton_generer():
+    """Dessine le bouton servant à générer les trajets"""
+    tortue = t.Turtle()
+    tortue.hideturtle()
+    tortue.penup()
+    tortue.goto(POS_BOUTON_GENERER)
+    tortue.color("gray")
+    tortue.begin_fill()
+    tortue.setheading(0)
+    for i in range(2):
+        tortue.forward(LARGEUR_BOUTON_GENERER)
+        tortue.right(90)
+        tortue.forward(HAUTEUR_BOUTON_GENERER)
+        tortue.right(90)
+    tortue.end_fill()
+    tortue.color("black")
+    tortue.goto(POS_TEXTE_GENERER)
+    tortue.write("Générer", font=("Arial", 8, "bold"))
 
 
 def choix_station(x, y):
@@ -342,16 +382,35 @@ def choix_station(x, y):
     return None
 
 
+def dans_rectangle(x, y, min_x, max_x, min_y, max_y):
+    """Retourne un booléen qui correspond à si le point (x, y) est dans
+    la zone spécifiée par les paramètres (on assume un rectangle)"""
+    return (min_x <= x <= max_x) and (min_y <= y <= max_y)
+
+
 def clic(x, y):
     """Gère les cas possibles lorsque l'usager clique sur l'écran"""
-    # Si clique bouton pour faire apparaître le choix de départ
-    if (POS_BOUTON_DEPART[0] <= x <= POS_BOUTON_DEPART[0] + TAILLE_BOUTON_DEPART) and (
-        POS_BOUTON_DEPART[1] - TAILLE_BOUTON_DEPART <= y <= POS_BOUTON_DEPART[1]
+    # Différents boutons possibles
+    if dans_rectangle(
+        x,
+        y,
+        POS_BOUTON_DEPART[0],
+        POS_BOUTON_DEPART[0] + TAILLE_BOUTON_DEPART,
+        POS_BOUTON_DEPART[1] - TAILLE_BOUTON_DEPART,
+        POS_BOUTON_DEPART[1],
     ):
-        user_input()
-        return
-
-    choix_station(x, y)
+        input_depart()
+    elif dans_rectangle(
+        x,
+        y,
+        POS_BOUTON_GENERER[0],
+        POS_BOUTON_GENERER[0] + LARGEUR_BOUTON_GENERER,
+        POS_BOUTON_GENERER[1] - HAUTEUR_BOUTON_GENERER,
+        POS_BOUTON_GENERER[1],
+    ):
+        generer_trajets()
+    else:
+        choix_station(x, y)
 
 
 def texte_depart_arrivee():
@@ -364,42 +423,61 @@ def texte_depart_arrivee():
     tortue_depart_arrivee.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
 
 
-def user_input():
-
+def input_depart():
+    global choix_depart
     while True:
         reponse = t.textinput("Où suis-je", "Où êtes-vous? (x,y): ")
+        if reponse == None:
+            return
+
         parties = reponse.split(",")
         if len(parties) == 2:
             try:
                 x = int(parties[0].strip())
                 y = int(parties[1].strip())
-                if 0 <= x <= 1280 and 0 <= y <= 750:
-                    return (x, y)
+                if (
+                    -LARGEUR / 2 <= x <= LARGEUR / 2
+                    and -HAUTEUR / 2 <= y <= HAUTEUR / 2
+                ):
+                    choix_depart = (x, y)
+                    t.tracer(1, 3)
+                    tortue_cercle_depart.goto(x, y)
+                    tortue_cercle_depart.showturtle()
+                    texte_depart_arrivee()
+                    return
                 else:
-                    print("Les coordonnées doivent être dans les limites 0-1280 pour x et 0-750 pour y.")
+                    print(
+                        "Les coordonnées doivent être dans les limites 0-1280 pour x et 0-750 pour y."
+                    )
             except ValueError:
                 print("Veuillez entrer deux nombres entiers séparés par une virgule.")
         else:
             print("Veuillez entrer deux nombres séparés par une virgule.")
 
 
-'''
+"""
 Le Métro
-'''
+"""
 
-LARGEUR = 1280
-HAUTEUR = 750
+LARGEUR = 1920
+HAUTEUR = 1010
 
 GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
 
 POS_TEXTE_DEPART = (-(LARGEUR / 2) + GAP_LARGEUR * 2, -HAUTEUR / 6)
-POS_TEXTE_ARRIVEE = (-(LARGEUR / 2) + GAP_LARGEUR * 2, -HAUTEUR / 5)
-TAILLE_BOUTON_DEPART = GAP_LARGEUR / 3
+POS_TEXTE_ARRIVEE = (POS_TEXTE_DEPART[0], POS_TEXTE_DEPART[1] - 25)
+POS_TEXTE_GENERER = (POS_TEXTE_DEPART[0], POS_TEXTE_ARRIVEE[1] - 25)
+
+TAILLE_BOUTON_DEPART = 17
 POS_BOUTON_DEPART = (
     POS_TEXTE_DEPART[0] - GAP_LARGEUR / 2,
-    POS_TEXTE_DEPART[1] + TAILLE_BOUTON_DEPART / 1.125,
+    POS_TEXTE_DEPART[1] + TAILLE_BOUTON_DEPART / 1.1,
 )
+
+POS_BOUTON_GENERER = (POS_TEXTE_DEPART[0] - 15, POS_TEXTE_ARRIVEE[1] - 10)
+HAUTEUR_BOUTON_GENERER = 17
+LARGEUR_BOUTON_GENERER = 75
 
 COULEUR_LACS = "#07426F"
 COULEUR_TERRE = "#D7E7F6"
@@ -425,17 +503,18 @@ graphe_metro = Graphe(False)
 lignes = []
 lacs = []
 ile = []
+ratio_km_pixel = 0
 
 choix_arrivee = None
 choix_depart = None
 
 # code pour générer le personnage
-#t.register_shape("ami_1.gif")
+# t.register_shape("ami_1.gif")
 
-#player = t.Turtle()
-#player.hideturtle
-#player.penup()
-#player.shape("ami_1.gif")
+# player = t.Turtle()
+# player.hideturtle
+# player.penup()
+# player.shape("ami_1.gif")
 
 tortue_depart_arrivee = t.Turtle()
 tortue_depart_arrivee.hideturtle()
@@ -448,6 +527,13 @@ tortue_cercle_arrivee.speed(0)
 tortue_cercle_arrivee.penup()
 tortue_cercle_arrivee.color("aqua")
 tortue_cercle_arrivee.hideturtle()
+
+tortue_cercle_depart = t.Turtle(shape="circle")
+tortue_cercle_depart.shapesize(0.5)
+tortue_cercle_depart.speed(0)
+tortue_cercle_depart.penup()
+tortue_cercle_depart.color("red")
+tortue_cercle_depart.hideturtle()
 
 lire_fichier_metro()
 lire_fichier_ile()
@@ -465,6 +551,7 @@ dessine_ile()
 dessine_stations()
 texte_depart_arrivee()
 dessine_bouton_depart()
+dessine_bouton_generer()
 
 ecran.listen()
 ecran.onscreenclick(clic)
