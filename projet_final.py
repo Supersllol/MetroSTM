@@ -5,6 +5,25 @@ import math
 import time
 
 
+class Trajet:
+    def __init__(self, nom, distance, liste_positions):
+        self._nom = nom
+        self._liste_positions = liste_positions
+        self._distance = distance
+
+    def get_nom(self):
+        return self._nom
+
+    def get_liste_positions(self):
+        return self._liste_positions
+
+    def get_distance(self):
+        return self._distance
+
+    def __str__(self):
+        return f"{self._nom}: {self._distance}m, positions: {self._liste_positions}"
+
+
 class Station:
     def __init__(self, nom, couleurs, position, alignement, isdown):
         self._nom = nom
@@ -28,7 +47,7 @@ class Station:
     def get_alignement(self):
         return self._alignement
 
-    def isdown(self):
+    def is_down(self):
         return self._isdown
 
     def set_position(self, position):
@@ -53,6 +72,9 @@ class Ligne:
     def get_ordre_stations(self):
         return self._ordre_stations
 
+    def __str__(self):
+        return f"Ligne {self._nom}: {self._ordre_stations}"
+
 
 def dijkstra(depart, couleurs):
     """Retourne un dictionnaire contenant les distances les plus courtes
@@ -66,7 +88,6 @@ def dijkstra(depart, couleurs):
     )
     # Algorithme de Dijkstra, mais en gardant en mémoire la station précédente
     dist = {s: [math.inf, None] for s in exterieur}
-    print(depart)
     dist[depart][0] = 0
     while len(exterieur) > 0:
         dmin = math.inf
@@ -85,17 +106,28 @@ def dijkstra(depart, couleurs):
 def meilleur_chemin(depart, arrivee, couleurs):
     """Retourne le chemin le plus court entre la station d'arrivée et de départ
     sous la forme d'une pile, en passant seulement par les stations des couleurs
-    passées en paramètre. Retourne un tuple avec la pile et la distance.
+    passées en paramètre. Retourne un tuple avec la pile, la distance et les couleurs
+    des stations parcourues.
     """
+    # Convertir depart et arrivee en sommets s'ils sont des stations
+    if type(depart) == Station:
+        depart = graphe_metro.sommet(depart.__str__())
+    if type(arrivee) == Station:
+        arrivee = graphe_metro.sommet(arrivee.__str__())
     dist = dijkstra(depart, couleurs)
     # Refaire le chemin à l'envers en empilant les précédentes
     distance, precedent = dist[arrivee]
     chemin = Pile()
+    couleurs_parcourues = set()
+    couleurs_parcourues |= stations[arrivee.__str__()].get_couleurs()
     chemin.empile(arrivee)
     while precedent != None:
         chemin.empile(precedent)
+        couleurs_precedent = stations[precedent.__str__()].get_couleurs()
+        if len(couleurs_precedent) == 1:
+            couleurs_parcourues |= couleurs_precedent
         precedent = dist[precedent][1]
-    return (chemin, distance)
+    return (chemin, distance, couleurs_parcourues)
 
 
 def station_plus_proche(point):
@@ -110,10 +142,46 @@ def station_plus_proche(point):
 
 
 def generer_trajets():
+    global trajets
     if choix_depart == None or choix_arrivee == None:
         return
     trajets = []
     depart, dist_depart = station_plus_proche(choix_depart)
+    dist_m = dist_depart * ratio_m_pixel
+    # Si on peut marcher on rajoute l'option
+    dist_direct = distance(choix_depart, choix_arrivee.get_position()) * ratio_m_pixel
+    if dist_direct <= DISTANCE_MAX_MARCHER:
+        trajets.append(
+            Trajet("Marche", dist_direct, [choix_depart, choix_arrivee.get_position()])
+        )
+
+    chemin, dist_metro, couleurs_parcourues = meilleur_chemin(
+        depart, choix_arrivee, {"jaune", "verte", "bleue", "orange"}
+    )
+    positions = [choix_depart]
+    while not chemin.estvide():
+        sommet = chemin.depile()
+        positions.append(stations[sommet.__str__()].get_position())
+    trajets.append(Trajet("Plus court", dist_m + dist_metro, positions))
+
+    # Si trajet déjà resté sur une ligne, pas besoin de continuer
+    print(couleurs_parcourues)
+    if len(couleurs_parcourues) == 1:
+        print(list(trajet.__str__() for trajet in trajets))
+        return
+    # Si départ et arrivée sur la même ligne, on rajoute l'option de rester sur la même ligne
+    inter_couleurs = depart.get_couleurs() & choix_arrivee.get_couleurs()
+    if inter_couleurs != set():
+        chemin, dist_metro, couleurs_parcourues = meilleur_chemin(
+            depart, choix_arrivee, inter_couleurs
+        )
+        positions = [choix_depart]
+        while not chemin.estvide():
+            sommet = chemin.depile()
+            positions.append(stations[sommet.__str__()].get_position())
+        trajets.append(Trajet("Même couleur", dist_m + dist_metro, positions))
+
+    print(list(trajet.__str__() for trajet in trajets))
 
 
 def lire_fichier_metro():
@@ -249,6 +317,16 @@ def conversion_pos():
         )
 
     # Trouver le ratio pour convertir des pixels en mètres
+    dist_m = graphe_metro.sommet("Montmorency").poids(
+        graphe_metro.sommet("De la Concorde")
+    )
+
+    dist_px = distance(
+        stations["Montmorency"].get_position(),
+        stations["De la Concorde"].get_position(),
+    )
+    global ratio_m_pixel
+    ratio_m_pixel = dist_m / dist_px
 
 
 def dessine_stations():
@@ -284,7 +362,7 @@ def dessine_stations():
             elif stations[nom_station].get_alignement() == "center":
                 tortue.seth(90)
 
-            if stations[nom_station].isdown():
+            if stations[nom_station].is_down():
                 tortue.seth(270)
                 tortue.forward(10)
             tortue.forward(5)
@@ -484,6 +562,9 @@ COULEUR_TERRE = "#D7E7F6"
 
 RAYON_CLIC = 6
 
+DISTANCE_MAX_MARCHER = 2500
+
+
 ecran = t.Screen()
 ecran.title("Métro de la SDF")
 ecran.setup(LARGEUR, HAUTEUR)
@@ -503,7 +584,8 @@ graphe_metro = Graphe(False)
 lignes = []
 lacs = []
 ile = []
-ratio_km_pixel = 0
+trajets = []
+ratio_m_pixel = 0
 
 choix_arrivee = None
 choix_depart = None
@@ -528,7 +610,7 @@ tortue_cercle_arrivee.penup()
 tortue_cercle_arrivee.color("aqua")
 tortue_cercle_arrivee.hideturtle()
 
-tortue_cercle_depart = t.Turtle(shape="circle")
+tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
 tortue_cercle_depart.shapesize(0.5)
 tortue_cercle_depart.speed(0)
 tortue_cercle_depart.penup()
