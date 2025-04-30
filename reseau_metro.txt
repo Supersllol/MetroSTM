@@ -7,7 +7,7 @@ Beaudry(45.51898897841842, -73.55599233475945)Berri-UQAM*378.76&Papineau*495.00%
 Berri-UQAM(45.515061686485794, -73.56170677295312)Beaudry*378.76&Champ-de-Mars*720.50&Jean-Drapeau*2362.10&Saint-Laurent*336.80&Sherbrooke*579.10%jaune$orange$vert
 Bonaventure(45.49805031291756, -73.56722704843452)Lucien-L'Allier*381.60&Square-Victoria-OACI*392.60%orange
 Cadillac(45.57689433490281, -73.54728679160522)L'Assomption*781.69&Langelier*518.51%vert=right
-Cartier(45.56016430122332, -73.6817113213702)De la Concorde*2073.60&Henri-Bourassa*1101.60%orange
+Cartier(45.56016430122332, -73.6817113213702)De la Concorde*2073.60&Henri-Bourassa*1101.60%orange=right
 Champ-de-Mars(45.51020933216487, -73.55681128937808)Berri-UQAM*720.50&Place-d'Armes*370.60%orange
 Charlevoix(45.4783006998537, -73.56983724163561)LaSalle*707.25&Lionel-Groulx*1077.31%vert
 Côte-des-Neiges(45.49684239370873, -73.62338787475127)Snowdon*959.60&Université-de-Montréal*764.60%bleue=right
@@ -37,7 +37,7 @@ Langelier(45.58279889374338, -73.54387289689205)Cadillac*518.51&Radisson*621.79%
 LaSalle(45.47078387668829, -73.5659081574753)Charlevoix*707.25&De l'Église*812.30%vert
 Laurier(45.527122442329926, -73.58634959599692)Mont-Royal*932.10&Rosemont*746.10%orange
 Lionel-Groulx(45.48284553457747, -73.5801148437035)Atwater*1387.74&Charlevoix*1077.31&Georges-Vanier*758.60&Place-Saint-Henri*579.60%orange$vert
-Longueuil-Université-de-Sherbrooke(45.52486652235229, -73.52203511856905)Jean-Drapeau*1572.10%jaune=center
+Longueuil-Université-de-Sherbrooke(45.52486652235229, -73.52203511856905)Jean-Drapeau*1572.10%jaune=left
 Lucien-L'Allier(45.495046660169315, -73.57116588593638)Bonaventure*381.60&Georges-Vanier*530.60%orange
 McGill(45.50404316223521, -73.57175459497526)Peel*296.52&Place-des-Arts*345.69%vert=right
 Monk(45.45113793597787, -73.59369024231648)Angrignon*844.29&Jolicoeur*1062.85%vert=right
@@ -56,7 +56,7 @@ Plamondon(45.49483660611086, -73.63911962860185)Côte-Sainte-Catherine*451.10&Na
 Préfontaine(45.541453942129955, -73.55491874295)Frontenac*1003.95&Joliette*383.43%vert=right
 Radisson(45.58940638495715, -73.53958873597698)Langelier*621.79&Honoré-Beaugrand*716.99%vert=right
 Rosemont(45.531220033887976, -73.59749406570799)Beaubien*541.10&Laurier*746.10%orange
-Saint-Laurent(45.510843218908995, -73.56462334814317)Berri-UQAM*336.80&Place-des-Arts*354.38%vert
+Saint-Laurent(45.510843218908995, -73.56462334814317)Berri-UQAM*336.80&Place-des-Arts*354.38%vert=right
 Saint-Michel(45.559874990313844, -73.60010065469058)D'Iberville*607.60%bleue=right
 Sauvé(45.549800576580935, -73.65610078954457)Crémazie*1279.60&Henri-Bourassa*771.60%orange
 Sherbrooke(45.51827318970493, -73.56848695489798)Berri-UQAM*579.10&Mont-Royal*932.10%orange
