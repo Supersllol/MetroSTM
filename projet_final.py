@@ -530,6 +530,55 @@ def texte_depart_arrivee():
     tortue_depart_arrivee.goto(POS_TEXTE_ARRIVEE)
     tortue_depart_arrivee.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
 
+def animation_déplacement(tortue, liste_de_positions):
+    """Animation qui exécute le déplacement"""
+    # commentaire de Hans:
+    # tester car impossible sans fonction GO:
+    # - j'ai mis tortue en paramètre, parce que je veux que ce sois la même tortue que le point de départ
+    # cliqué par l'usager qui bouge
+    # - shapesize fonctionne pas (à vérifier)
+
+    # When Go is clicked
+    tortue.shape("ami_1.gif")
+    tortue.shapesize(0.5)
+    tortue.speed(0.6)
+    tortue.pendown()
+
+    tortue.goto(liste_de_positions[0]) # aka la station de départ
+    tortue.penup()
+
+    # animation transformation metro
+    tortue.shapesize(0.4)
+    tortue.shapesize(0.3)
+    tortue.shapesize(0.2)
+
+    tortue.shape('metro_1.gif')
+    tortue.speed(1.5)
+
+    tortue.shapesize(0.2)
+    tortue.shapesize(0.3)
+    tortue.shapesize(0.4)
+
+    # déplacements dans les stations
+    for position in range(len(liste_de_positions)):
+        tortue.goto(liste_de_positions[position])
+
+    # animation transformation bonhomme
+    tortue.shapesize(0.4)
+    tortue.shapesize(0.3)
+    tortue.shapesize(0.2)
+
+    tortue.shape('ami_1.gif')
+    tortue.speed(0.6)
+
+    tortue.shapesize(0.2)
+    tortue.shapesize(0.3)
+    tortue.shapesize(0.4)
+
+    # jump, jump, jump
+    for i in range(1, 6):
+        tortue.goto((tortue.xcor(), tortue.ycor()+60))
+        tortue.goto((tortue.xcor(), tortue.ycor()-60))
 
 # def input_depart():
 #     global choix_depart
@@ -626,6 +675,7 @@ choix_depart = None
 
 # code pour générer le personnage
 t.register_shape("ami_1.gif")
+t.register_shape("metro_1.gif")
 
 # player = t.Turtle()
 # player.hideturtle
@@ -665,7 +715,7 @@ lire_fichier_metro()
 lire_fichier_ile()
 conversion_pos()
 
-# l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
+#l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
 # dessine_animations(l)
 
 
@@ -675,7 +725,7 @@ dessine_stations()
 texte_depart_arrivee()
 # dessine_bouton_depart()
 dessine_bouton_generer()
-
+# dessine_animations()
 
 ecran.listen()
 ecran.onscreenclick(clic)
