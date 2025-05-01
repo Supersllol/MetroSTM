@@ -457,12 +457,12 @@ def dessine_bouton_generer():
 
 def dessine_animations(liste_de_positions):
     """Dessine le chemin à faire selon une liste de position"""
-    tortue_anim.penup()
-    tortue_anim.goto(liste_de_positions[0])
-    tortue_anim.pendown()
+    tortue_animation_options.penup()
+    tortue_animation_options.goto(liste_de_positions[0])
+    tortue_animation_options.pendown()
 
     for position in range(len(liste_de_positions)):
-        tortue_anim.goto(liste_de_positions[position])
+        tortue_animation_options.goto(liste_de_positions[position])
 
 
 def choix_station(x, y):
@@ -475,8 +475,8 @@ def choix_station(x, y):
         ):
             global choix_arrivee
             t.tracer(1, 3)
-            tortue_cercle_arrivee.goto(pos)
-            tortue_cercle_arrivee.showturtle()
+            tortue_input_arrivee.goto(pos)
+            tortue_input_arrivee.showturtle()
             choix_arrivee = station
             texte_depart_arrivee()
             return station
@@ -516,19 +516,19 @@ def clic(x, y):
     elif choix_station(x, y) == None:
         choix_depart = (x, y)
         t.tracer(1, 3)
-        tortue_cercle_depart.goto(x, y)
-        tortue_cercle_depart.showturtle()
+        #tortue_cercle_depart.goto(x, y)
+        #tortue_cercle_depart.showturtle()
         texte_depart_arrivee()
 
 
 def texte_depart_arrivee():
     """Affiche à l'écran les choix de station de départ et d'arrivée"""
     t.tracer(0)
-    tortue_depart_arrivee.clear()
-    tortue_depart_arrivee.goto(POS_TEXTE_DEPART)
-    tortue_depart_arrivee.write(f"Départ: {choix_depart}", font=("Arial", 8, "bold"))
-    tortue_depart_arrivee.goto(POS_TEXTE_ARRIVEE)
-    tortue_depart_arrivee.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
+    tortue_input_depart.clear()
+    tortue_input_depart.goto(POS_TEXTE_DEPART)
+    tortue_input_depart.write(f"Départ: {choix_depart}", font=("Arial", 8, "bold"))
+    tortue_input_depart.goto(POS_TEXTE_ARRIVEE)
+    tortue_input_depart.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
 
 def animation_déplacement(tortue, liste_de_positions):
     """Animation qui exécute le déplacement"""
@@ -616,6 +616,8 @@ def animation_déplacement(tortue, liste_de_positions):
 Le Métro
 """
 
+# Écran configuration
+
 LARGEUR = 1920
 HAUTEUR = 1010
 
@@ -639,14 +641,12 @@ HAUTEUR_BOUTONS = 17
 LARGEUR_BOUTON_GENERER = 75
 LARGEUR_BOUTON_GO = 30
 
-
 COULEUR_LACS = "#07426F"
 COULEUR_TERRE = "#D7E7F6"
 
 RAYON_CLIC = 6
 
 DISTANCE_MAX_MARCHER = 1000
-
 
 ecran = t.Screen()
 ecran.title("Métro de la SDF")
@@ -659,9 +659,7 @@ couleurs_lignes = {
     "orange": "#F47416",
 }
 
-# ami_1 comme gif de personnage
-t.register_shape("ami_1.gif")
-
+# Implémentation des variables
 stations = {}
 graphe_metro = Graphe(False)
 lignes = []
@@ -673,51 +671,48 @@ ratio_m_pixel = 0
 choix_arrivee = None
 choix_depart = None
 
-# code pour générer le personnage
+# Enregistrer les deux gif
 t.register_shape("ami_1.gif")
 t.register_shape("metro_1.gif")
 
-# player = t.Turtle()
-# player.hideturtle
-# player.penup()
-# player.shape("ami_1.gif")
+# Implémentation de l'input Départ
+tortue_input_depart = t.Turtle()
+tortue_input_depart.hideturtle()
+tortue_input_depart.penup()
+tortue_input_depart.shape("ami_1.gif")
 
-tortue_depart_arrivee = t.Turtle()
-tortue_depart_arrivee.hideturtle()
-tortue_depart_arrivee.penup()
-tortue_depart_arrivee.shape("ami_1.gif")
+# Implémentation de l'input Arrivée
+tortue_input_arrivee = t.Turtle(shape="circle")
+tortue_input_arrivee.shapesize(0.5)
+tortue_input_arrivee.speed(0)
+tortue_input_arrivee.penup()
+tortue_input_arrivee.color("aqua")
+tortue_input_arrivee.hideturtle()
 
+#tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
+#tortue_cercle_depart.shapesize(0.5)
+#tortue_cercle_depart.speed(0)
+#tortue_cercle_depart.penup()
+#tortue_cercle_depart.color("red")
+#tortue_cercle_depart.hideturtle()
+
+# Implémentation des options de trajets
 tortue_options_trajets = t.Turtle()
 tortue_options_trajets.hideturtle()
 tortue_options_trajets.penup()
 
-tortue_cercle_arrivee = t.Turtle(shape="circle")
-tortue_cercle_arrivee.shapesize(0.5)
-tortue_cercle_arrivee.speed(0)
-tortue_cercle_arrivee.penup()
-tortue_cercle_arrivee.color("aqua")
-tortue_cercle_arrivee.hideturtle()
+# Implémentation des animations des options
+tortue_animation_options = t.Turtle()
+tortue_animation_options.hideturtle()
+tortue_animation_options.color("#056cf1")
+tortue_animation_options.penup()
+tortue_animation_options.pensize(5)
 
-tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
-tortue_cercle_depart.shapesize(0.5)
-tortue_cercle_depart.speed(0)
-tortue_cercle_depart.penup()
-tortue_cercle_depart.color("red")
-tortue_cercle_depart.hideturtle()
-
-tortue_anim = t.Turtle()
-tortue_anim.hideturtle()
-tortue_anim.color("#056cf1")
-tortue_anim.penup()
-tortue_anim.pensize(5)
+#l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
 
 lire_fichier_metro()
 lire_fichier_ile()
 conversion_pos()
-
-#l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
-# dessine_animations(l)
-
 
 dessine_lacs()
 dessine_ile()
