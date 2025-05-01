@@ -610,9 +610,8 @@ couleurs_lignes = {
     "orange": "#F47416",
 }
 
-# ami_2 comme gif de personnage
+# ami_1 comme gif de personnage
 t.register_shape("ami_1.gif")
-t.register_shape("ami_2.gif")
 
 stations = {}
 graphe_metro = Graphe(False)
@@ -626,16 +625,17 @@ choix_arrivee = None
 choix_depart = None
 
 # code pour générer le personnage
-# t.register_shape("ami_2.gif")
+t.register_shape("ami_1.gif")
 
 # player = t.Turtle()
 # player.hideturtle
 # player.penup()
-# player.shape("ami_2.gif")
+# player.shape("ami_1.gif")
 
 tortue_depart_arrivee = t.Turtle()
 tortue_depart_arrivee.hideturtle()
 tortue_depart_arrivee.penup()
+tortue_depart_arrivee.shape("ami_1.gif")
 
 tortue_options_trajets = t.Turtle()
 tortue_options_trajets.hideturtle()
@@ -648,7 +648,7 @@ tortue_cercle_arrivee.penup()
 tortue_cercle_arrivee.color("aqua")
 tortue_cercle_arrivee.hideturtle()
 
-tortue_cercle_depart = t.Turtle(shape="ami_2.gif")
+tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
 tortue_cercle_depart.shapesize(0.5)
 tortue_cercle_depart.speed(0)
 tortue_cercle_depart.penup()
