@@ -555,12 +555,10 @@ def animation_déplacement():
         tortue_personnage.goto((522, tortue_personnage.ycor() + 50))
         time.sleep(0.5)
     else:
-        tortue_personnage.goto(
-            (tortue_personnage.xcor() - 20, tortue_personnage.ycor())
-        )
-
+        tortue_personnage.goto((tortue_personnage.xcor() - 20, tortue_personnage.ycor()))
+    
     tortue_personnage.speed(2)
-    for i in range(3):  # saut du personnage
+    for i in range(3): # saut du personnage
         tortue_personnage.goto(
             (tortue_personnage.xcor(), tortue_personnage.ycor() + 60)
         )
@@ -575,10 +573,15 @@ def animation_déplacement():
         tortue_personnage.hideturtle()
         time.sleep(1)
         tortue_requin.speed(2)
-        for i in range(3):  # saut du requin
+        for i in range(3): # saut du requin
             tortue_requin.goto((522, tortue_requin.ycor() + 60))
             tortue_requin.goto((522, tortue_requin.ycor() - 60))
-
+        tortue_requin.shape("oh-ho_2.gif")
+        tortue_requin.shape("oh-ho_3.gif")
+        tortue_requin.shape("oh-ho_4.gif")
+        tortue_requin.shape("oh-ho_3.gif")
+        tortue_requin.shape("oh-ho_2.gif")
+        tortue_requin.shape("oh-ho_1.gif")
         # il va se cacher
         tortue_requin.speed(3)
         time.sleep(0.5)
@@ -646,7 +649,6 @@ def choix_station(x, y):
             return station
 
     return None
-
 
 def clic_boutons_trajets(x, y):
     """Vérifie si un des boutons de trajets a été cliqué"""
@@ -809,6 +811,9 @@ suit_trajet = False
 t.register_shape("ami_1.gif")
 t.register_shape("metro_2.gif")
 t.register_shape("oh-ho_1.gif")
+t.register_shape("oh-ho_2.gif")
+t.register_shape("oh-ho_3.gif")
+t.register_shape("oh-ho_4.gif")
 
 # Tortue qui écrit le texte qui montre les choix
 tortue_texte_choix = t.Turtle()
