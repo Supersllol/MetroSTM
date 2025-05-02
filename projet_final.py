@@ -6,8 +6,10 @@ import turtle as t
 import math
 import time
 
+'''
+Classes
+'''
 
-# Classes
 class Station:
     """Classe représentant une station de métro"""
 
@@ -386,8 +388,10 @@ def generer_trajets():
         positions.append(stations[sommet.__str__()])
     trajets.append(Trajet("Même couleur", dist_marche + dist_metro, positions))
 
-
+'''
 # Fonctions de dessin
+'''
+
 def dessine_stations():
     """Dessine les stations et les lignes de métro avec leurs noms
     sur l'écran"""
@@ -544,6 +548,11 @@ def animation_déplacement():
     tortue_personnage.speed(2)
 
     # jump, jump, jump
+    tortue_personnage.speed(1)
+    tortue_personnage.goto(
+            (tortue_personnage.xcor() -20, tortue_personnage.ycor())
+        )
+    tortue_personnage.speed(2)
     for i in range(3):
         tortue_personnage.goto(
             (tortue_personnage.xcor(), tortue_personnage.ycor() + 60)
@@ -556,7 +565,10 @@ def animation_déplacement():
     suit_trajet = False
 
 
-# Fonctions gérant les clics de l'usager
+'''
+Fonctions gérant les clics de l'usager
+'''
+
 def clic(x, y):
     """Gère les cas possibles lorsque l'usager clique sur l'écran"""
     global choix_depart
@@ -617,8 +629,10 @@ def clic_boutons_trajets(x, y):
             return i
     return None
 
+'''
+Fonctions gérant l'affichage des trajets possibles
+'''
 
-# Fonctions gérant l'affichage des trajets possibles
 def creer_boutons_trajets():
     """Crée les 3 boutons de trajets qui peuvent être affichés"""
     for i in range(3):
@@ -656,8 +670,10 @@ def cacher_options():
     for bouton in boutons_trajets:
         bouton.efface_bouton()
 
+'''
+Fonctions gérant l'affichage des trajets possibles
+'''
 
-# Fonctions utilitaires
 def distance(point_a, point_b):
     """Prends deux tuples et retourne la distance entre les deux points"""
     return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
