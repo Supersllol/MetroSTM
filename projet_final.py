@@ -224,6 +224,7 @@ def generer_trajets():
     # Si trajet reste sur la même ligne pas besoin de continuer
     if len(couleurs_parcourues) == 1:
         return
+
     # Si départ et arrivée sur la même ligne, on rajoute l'option de rester sur la même ligne
     inter_couleurs = depart.get_couleurs() & choix_arrivee.get_couleurs()
     if inter_couleurs != set():
@@ -495,8 +496,8 @@ def choix_station(x, y):
         ):
             global choix_arrivee
             t.tracer(1, 3)
-            tortue_input_arrivee.goto(pos)
-            tortue_input_arrivee.showturtle()
+            tortue_cercle_arrivee.goto(pos)
+            tortue_cercle_arrivee.showturtle()
             choix_arrivee = station
             texte_depart_arrivee()
             return station
@@ -515,7 +516,7 @@ def clic(x, y):
         choix_trajet = 0
         dessine_trajet_choisi()
     elif bouton_go.clic_dans_bouton(x, y):
-        print("go")
+        animation_déplacement()
     elif choix_station(x, y) != None:
         cacher_options()
         return
@@ -524,8 +525,8 @@ def clic(x, y):
     else:
         choix_depart = (x, y)
         t.tracer(1, 3)
-        tortue_cercle_depart.goto(x, y)
-        tortue_cercle_depart.showturtle()
+        tortue_personnage.goto(x, y)
+        tortue_personnage.showturtle()
         texte_depart_arrivee()
         cacher_options()
 
@@ -533,62 +534,59 @@ def clic(x, y):
 def texte_depart_arrivee():
     """Affiche à l'écran les choix de station de départ et d'arrivée"""
     t.tracer(0)
-    tortue_input_depart.clear()
-    tortue_input_depart.goto(POS_TEXTE_DEPART)
-    tortue_input_depart.write(f"Départ: {choix_depart}", font=("Arial", 8, "bold"))
-    tortue_input_depart.goto(POS_TEXTE_ARRIVEE)
-    tortue_input_depart.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
+    tortue_texte.clear()
+    tortue_texte.goto(POS_TEXTE_DEPART)
+    tortue_texte.write(f"Départ: {choix_depart}", font=("Arial", 8, "bold"))
+    tortue_texte.goto(POS_TEXTE_ARRIVEE)
+    tortue_texte.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
 
 
-def animation_déplacement(tortue, liste_de_positions):
+def animation_déplacement():
     """Animation qui exécute le déplacement"""
-    # commentaire de Hans:
-    # tester car impossible sans fonction GO:
-    # - j'ai mis tortue en paramètre, parce que je veux que ce sois la même tortue que le point de départ
-    # cliqué par l'usager qui bouge
-    # - shapesize fonctionne pas (à vérifier)
+    global choix_depart
+    global choix_arrivee
+    cacher_options()
+    t.tracer(1, 15)
+    liste_de_positions = trajets[choix_trajet].get_liste_positions()
 
-    # When Go is clicked
-    tortue.shape("ami_1.gif")
-    tortue.shapesize(0.5)
-    tortue.speed(0.6)
-    tortue.pendown()
+    tortue_personnage.shape("ami_1.gif")
+    tortue_personnage.speed(1)
+    tortue_personnage.pendown()
 
-    tortue.goto(liste_de_positions[0])  # aka la station de départ
-    tortue.penup()
+    # Si seulement marcher
+    if len(liste_de_positions) == 2:
+        tortue_personnage.goto(liste_de_positions[1])
+    else:
+        tortue_personnage.goto(liste_de_positions[1])  # aka la station de départ
+        time.sleep(0.5)
+        tortue_personnage.shape("metro_1.gif")
+        tortue_personnage.speed(2)
 
-    # animation transformation metro
-    tortue.shapesize(0.4)
-    tortue.shapesize(0.3)
-    tortue.shapesize(0.2)
+        # déplacements dans les stations
+        for position in range(2, len(liste_de_positions)):
+            tortue_personnage.goto(liste_de_positions[position])
 
-    tortue.shape("metro_1.gif")
-    tortue.speed(1.5)
-
-    tortue.shapesize(0.2)
-    tortue.shapesize(0.3)
-    tortue.shapesize(0.4)
-
-    # déplacements dans les stations
-    for position in range(len(liste_de_positions)):
-        tortue.goto(liste_de_positions[position])
-
-    # animation transformation bonhomme
-    tortue.shapesize(0.4)
-    tortue.shapesize(0.3)
-    tortue.shapesize(0.2)
-
-    tortue.shape("ami_1.gif")
-    tortue.speed(0.6)
-
-    tortue.shapesize(0.2)
-    tortue.shapesize(0.3)
-    tortue.shapesize(0.4)
+    tortue_personnage.penup()
+    tortue_cercle_arrivee.hideturtle()
+    choix_depart = None
+    choix_arrivee = None
+    t.tracer(0, 0)
+    texte_depart_arrivee()
+    time.sleep(0.5)
+    t.tracer(1, 15)
+    tortue_personnage.shape("ami_1.gif")
+    tortue_personnage.speed(2)
 
     # jump, jump, jump
-    for i in range(1, 6):
-        tortue.goto((tortue.xcor(), tortue.ycor() + 60))
-        tortue.goto((tortue.xcor(), tortue.ycor() - 60))
+    for i in range(3):
+        tortue_personnage.goto(
+            (tortue_personnage.xcor(), tortue_personnage.ycor() + 60)
+        )
+        tortue_personnage.goto(
+            (tortue_personnage.xcor(), tortue_personnage.ycor() - 60)
+        )
+    tortue_personnage.speed(0)
+    t.tracer(0, 0)
 
 
 def creer_boutons_trajets():
@@ -608,6 +606,7 @@ def creer_boutons_trajets():
 def cacher_options():
     bouton_go.efface_bouton()
     tortue_preview_trajet.clear()
+    tortue_personnage.clear()
     for bouton in boutons_trajets:
         bouton.efface_bouton()
 
@@ -653,7 +652,7 @@ POS_1ER_BOUTON_TRAJET = (
 POS_BOUTON_GENERER = (POS_TEXTE_GENERER[0] - 15, POS_TEXTE_GENERER[1] - 1)
 POS_BOUTON_GO = (POS_TEXTE_GO[0] - 15, POS_TEXTE_GO[1] - 1)
 
-COULEUR_LACS = "#07426F"
+COULEUR_LACS = "#6EA6D4"
 COULEUR_TERRE = "#D7E7F6"
 
 RAYON_CLIC = 6
@@ -701,25 +700,12 @@ choix_trajet = 0
 t.register_shape("ami_1.gif")
 t.register_shape("metro_1.gif")
 
-# Implémentation de l'input Départ
-tortue_input_depart = t.Turtle()
-tortue_input_depart.hideturtle()
-tortue_input_depart.penup()
-tortue_input_depart.shape("ami_1.gif")
+# Tortue qui écrit le texte
+tortue_texte = t.Turtle()
+tortue_texte.hideturtle()
+tortue_texte.penup()
 
-# Implémentation de l'input Arrivée
-tortue_input_arrivee = t.Turtle(shape="circle")
-tortue_input_arrivee.shapesize(0.5)
-tortue_input_arrivee.speed(0)
-tortue_input_arrivee.penup()
-tortue_input_arrivee.color("aqua")
-tortue_input_arrivee.hideturtle()
-
-# Implémentation des options de trajets
-tortue_options_trajets = t.Turtle()
-tortue_options_trajets.hideturtle()
-tortue_options_trajets.penup()
-
+# Tortue qui affiche la station d'arrivée
 tortue_cercle_arrivee = t.Turtle(shape="circle")
 tortue_cercle_arrivee.shapesize(0.5)
 tortue_cercle_arrivee.speed(0)
@@ -727,17 +713,13 @@ tortue_cercle_arrivee.penup()
 tortue_cercle_arrivee.color("aqua")
 tortue_cercle_arrivee.hideturtle()
 
-tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
-tortue_cercle_depart.speed(0)
-tortue_cercle_depart.penup()
-tortue_cercle_depart.hideturtle()
+# Tortue qui affiche les options de trajets
+tortue_options_trajets = t.Turtle()
+tortue_options_trajets.hideturtle()
+tortue_options_trajets.penup()
 
-tortue_anim = t.Turtle()
-tortue_anim.hideturtle()
-tortue_anim.color("#056cf1")
-tortue_anim.penup()
-tortue_anim.pensize(5)
-# Implémentation des animations des options
+
+# Tortue qui dessine les trajets possibles
 tortue_preview_trajet = t.Turtle()
 tortue_preview_trajet.hideturtle()
 tortue_preview_trajet.speed(0)
@@ -754,6 +736,15 @@ dessine_stations()
 texte_depart_arrivee()
 creer_boutons_trajets()
 bouton_generer.dessine_bouton()
+
+# Tortue qui identifie la position de l'usager
+# Mise après les lacs pour pouvoir passer par-dessus
+tortue_personnage = t.Turtle(shape="ami_1.gif")
+tortue_personnage.speed(0)
+tortue_personnage.color("#056CF1")
+tortue_personnage.pensize(5)
+tortue_personnage.penup()
+tortue_personnage.hideturtle()
 
 ecran.listen()
 ecran.onscreenclick(clic)
