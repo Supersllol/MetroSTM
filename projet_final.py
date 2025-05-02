@@ -21,7 +21,7 @@ class Trajet:
         return self._distance
 
     def __str__(self):
-        return f"{self._nom}: {self._distance}m, positions: {self._liste_positions}"
+        return f"{self._nom}: {self._distance}m"
 
 
 class Station:
@@ -58,6 +58,7 @@ class Station:
 
 
 class Ligne:
+
     def __init__(self, nom, couleur, ordre_stations):
         self._nom = nom
         self._couleur = couleur
@@ -74,6 +75,55 @@ class Ligne:
 
     def __str__(self):
         return f"Ligne {self._nom}: {self._ordre_stations}"
+
+
+class Bouton:
+    def __init__(self, nom, pos_bouton, pos_texte, couleur, largeur, hauteur):
+        self._nom = nom
+        self._pos_bouton = pos_bouton
+        self._pos_texte = pos_texte
+        self._couleur = couleur
+        self._largeur = largeur
+        self._hauteur = hauteur
+        self._visible = False
+
+        self._tortue = t.Turtle()
+        self._tortue.hideturtle()
+        self._tortue.penup()
+
+    def dessine_bouton(self):
+        self._tortue.goto(self._pos_bouton)
+        self._tortue.color(self._couleur)
+        self._tortue.begin_fill()
+        self._tortue.setheading(0)
+        for i in range(2):
+            self._tortue.forward(self._largeur)
+            self._tortue.left(90)
+            self._tortue.forward(self._hauteur)
+            self._tortue.left(90)
+        self._tortue.end_fill()
+        self._tortue.goto(self._pos_texte)
+        self._tortue.color("black")
+        self._tortue.write(self._nom, font=("Arial", 8, "bold"))
+        self._visible = True
+
+    def clic_dans_bouton(self, x, y):
+        if not self._visible:
+            return False
+
+        return (self._pos_bouton[0] <= x <= self._pos_bouton[0] + self._largeur) and (
+            self._pos_bouton[1] <= y <= self._pos_bouton[1] + self._hauteur
+        )
+
+    def efface_bouton(self):
+        self._tortue.clear()
+        self._visible = False
+
+    def est_visible(self):
+        return self._visible
+
+    def change_nom(self, nom):
+        self._nom = nom
 
 
 def dijkstra(depart, couleurs):
@@ -271,7 +321,7 @@ def conversion_pos():
     """Convertis les coordonnées géographiques pour être dans le référentiel de l'écran."""
     # Stations plus à l'est et au nord
     maximum = (
-        stations["Longueuil-Université-de-Sherbrooke"].get_position()[1],
+        stations["Longueuil"].get_position()[1],
         stations["Honoré-Beaugrand"].get_position()[0],
     )
 
@@ -408,51 +458,10 @@ def dessine_ile():
     tortue.end_fill()
 
 
-# def dessine_bouton_depart():
-#     """Dessine le bouton servant à choisir la position de départ"""
-#     tortue = t.Turtle()
-#     tortue.hideturtle()
-#     tortue.penup()
-#     tortue.goto(POS_BOUTON_DEPART)
-#     tortue.color("red")
-#     tortue.begin_fill()
-#     tortue.setheading(0)
-#     for i in range(4):
-#         tortue.forward(TAILLE_BOUTON_DEPART)
-#         tortue.right(90)
-#     tortue.end_fill()
-
-
-def dessine_options_trajets():
-    pass
-
-
-def dessine_bouton_generer():
-    """Dessine le bouton servant à générer les trajets"""
-    tortue = t.Turtle()
-    tortue.hideturtle()
-    tortue.penup()
-    tortue.goto(POS_BOUTON_GENERER)
-    tortue.color("gray")
-    tortue.begin_fill()
-    tortue.setheading(0)
-    for i in range(2):
-        tortue.forward(LARGEUR_BOUTON_GENERER)
-        tortue.right(90)
-        tortue.forward(HAUTEUR_BOUTONS)
-        tortue.right(90)
-    tortue.end_fill()
-    tortue.goto(POS_BOUTON_GO)
-    tortue.begin_fill()
-    for i in range(2):
-        tortue.forward(LARGEUR_BOUTON_GO)
-        tortue.right(90)
-        tortue.forward(HAUTEUR_BOUTONS)
-        tortue.right(90)
-    tortue.end_fill()
-    tortue.color("black")
-    tortue.goto(POS_TEXTE_GENERER)
-    tortue.write("Générer", font=("Arial", 8, "bold"))
+def changer_options_trajets():
+    for i in range(len(trajets)):
+        bouton = boutons_trajets[i]
+        trajet = trajets[i]
 
 
 def dessine_animations(liste_de_positions):
@@ -494,26 +503,16 @@ def clic(x, y):
     """Gère les cas possibles lorsque l'usager clique sur l'écran"""
     global choix_depart
     # Différents boutons possibles
-    # if dans_rectangle(
-    #     x,
-    #     y,
-    #     POS_BOUTON_DEPART[0],
-    #     POS_BOUTON_DEPART[0] + TAILLE_BOUTON_DEPART,
-    #     POS_BOUTON_DEPART[1] - TAILLE_BOUTON_DEPART,
-    #     POS_BOUTON_DEPART[1],
-    # ):
-    #     input_depart()
-    if dans_rectangle(
-        x,
-        y,
-        POS_BOUTON_GENERER[0],
-        POS_BOUTON_GENERER[0] + LARGEUR_BOUTON_GENERER,
-        POS_BOUTON_GENERER[1] - HAUTEUR_BOUTONS,
-        POS_BOUTON_GENERER[1],
-    ):
+    if bouton_generer.clic_dans_bouton(x, y):
         generer_trajets()
         print(list(trajet.__str__() for trajet in trajets))
-    elif choix_station(x, y) == None:
+    elif bouton_go.clic_dans_bouton(x, y):
+        print("go")
+    elif choix_station(x, y) != None:
+        return
+    elif clic_boutons_trajets(x, y) != None:
+        return
+    else:
         choix_depart = (x, y)
         t.tracer(1, 3)
         tortue_cercle_depart.goto(x, y)
@@ -531,36 +530,32 @@ def texte_depart_arrivee():
     tortue_depart_arrivee.write(f"Arrivée: {choix_arrivee}", font=("Arial", 8, "bold"))
 
 
-# def input_depart():
-#     global choix_depart
-#     while True:
-#         reponse = t.textinput("Où suis-je", "Où êtes-vous? (x,y): ")
-#         if reponse == None:
-#             return
+def creer_boutons_trajets():
+    for i in range(3):
+        boutons_trajets.append(
+            Bouton(
+                f"Trajet {i}",
+                (POS_1ER_BOUTON_TRAJET[0], POS_1ER_BOUTON_TRAJET[1] + i * GAP_TEXTE),
+                (POS_1ER_TEXTE_TRAJET[0], POS_1ER_TEXTE_TRAJET[1] + i * GAP_TEXTE),
+                couleurs_boutons_trajets[i],
+                TAILLE_BOUTON_TRAJET,
+                TAILLE_BOUTON_TRAJET,
+            )
+        )
 
-#         parties = reponse.split(",")
-#         if len(parties) == 2:
-#             try:
-#                 x = int(parties[0].strip())
-#                 y = int(parties[1].strip())
-#                 if (
-#                     -LARGEUR / 2 <= x <= LARGEUR / 2
-#                     and -HAUTEUR / 2 <= y <= HAUTEUR / 2
-#                 ):
-#                     choix_depart = (x, y)
-#                     t.tracer(1, 3)
-#                     tortue_cercle_depart.goto(x, y)
-#                     tortue_cercle_depart.showturtle()
-#                     texte_depart_arrivee()
-#                     return
-#                 else:
-#                     print(
-#                         "Les coordonnées doivent être dans les limites 0-1280 pour x et 0-750 pour y."
-#                     )
-#             except ValueError:
-#                 print("Veuillez entrer deux nombres entiers séparés par une virgule.")
-#         else:
-#             print("Veuillez entrer deux nombres séparés par une virgule.")
+        for bouton in boutons_trajets:
+            bouton.dessine_bouton()
+
+
+def clic_boutons_trajets(x, y):
+    global choix_trajet
+    for i in range(len(boutons_trajets)):
+        if boutons_trajets[i].clic_dans_bouton(x, y):
+            choix_trajet = i
+            print(choix_trajet)
+            return i
+
+    return None
 
 
 """
@@ -574,22 +569,23 @@ GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
 GAP_TEXTE = 25
 
+HAUTEUR_BOUTONS = 17
+LARGEUR_BOUTON_GENERER = 75
+LARGEUR_BOUTON_GO = 44
+TAILLE_BOUTON_TRAJET = 17
+
 POS_TEXTE_DEPART = (-(LARGEUR / 2) + GAP_LARGEUR * 2, -HAUTEUR / 6)
 POS_TEXTE_ARRIVEE = (POS_TEXTE_DEPART[0], POS_TEXTE_DEPART[1] - GAP_TEXTE)
 POS_TEXTE_GENERER = (POS_TEXTE_DEPART[0] + 10, POS_TEXTE_ARRIVEE[1] - GAP_TEXTE)
+POS_1ER_TEXTE_TRAJET = (POS_TEXTE_GENERER[0] + 200, POS_TEXTE_ARRIVEE[1])
+POS_TEXTE_GO = (POS_1ER_TEXTE_TRAJET[0] + 10, POS_TEXTE_GENERER[1])
 
-# TAILLE_BOUTON_DEPART = 17
-# POS_BOUTON_DEPART = (
-#     POS_TEXTE_DEPART[0] - GAP_LARGEUR / 2,
-#     POS_TEXTE_DEPART[1] + TAILLE_BOUTON_DEPART / 1.1,
-# )
-
-POS_BOUTON_GENERER = (POS_TEXTE_DEPART[0] - 5, POS_TEXTE_ARRIVEE[1] - 10)
-POS_BOUTON_GO = (POS_BOUTON_GENERER[0] + 200, POS_BOUTON_GENERER[1])
-HAUTEUR_BOUTONS = 17
-LARGEUR_BOUTON_GENERER = 75
-LARGEUR_BOUTON_GO = 30
-
+POS_1ER_BOUTON_TRAJET = (
+    POS_1ER_TEXTE_TRAJET[0] - GAP_TEXTE,
+    POS_1ER_TEXTE_TRAJET[1] - 1,
+)
+POS_BOUTON_GENERER = (POS_TEXTE_GENERER[0] - 15, POS_TEXTE_GENERER[1] - 1)
+POS_BOUTON_GO = (POS_TEXTE_GO[0] - 15, POS_TEXTE_GO[1] - 1)
 
 COULEUR_LACS = "#07426F"
 COULEUR_TERRE = "#D7E7F6"
@@ -619,10 +615,24 @@ lignes = []
 lacs = []
 ile = []
 trajets = []
+boutons_trajets = []
+couleurs_boutons_trajets = ["#FF0000", "#8B00FF", "#AAFF00"]
+bouton_generer = Bouton(
+    "Générer",
+    POS_BOUTON_GENERER,
+    POS_TEXTE_GENERER,
+    "gray",
+    LARGEUR_BOUTON_GENERER,
+    HAUTEUR_BOUTONS,
+)
+bouton_go = Bouton(
+    "Go", POS_BOUTON_GO, POS_TEXTE_GO, "gray", LARGEUR_BOUTON_GO, HAUTEUR_BOUTONS
+)
 ratio_m_pixel = 0
 
 choix_arrivee = None
 choix_depart = None
+choix_trajet = 0
 
 # code pour générer le personnage
 t.register_shape("ami_1.gif")
@@ -649,10 +659,8 @@ tortue_cercle_arrivee.color("aqua")
 tortue_cercle_arrivee.hideturtle()
 
 tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
-tortue_cercle_depart.shapesize(0.5)
 tortue_cercle_depart.speed(0)
 tortue_cercle_depart.penup()
-tortue_cercle_depart.color("red")
 tortue_cercle_depart.hideturtle()
 
 tortue_anim = t.Turtle()
@@ -673,9 +681,9 @@ dessine_lacs()
 dessine_ile()
 dessine_stations()
 texte_depart_arrivee()
-# dessine_bouton_depart()
-dessine_bouton_generer()
-
+creer_boutons_trajets()
+bouton_generer.dessine_bouton()
+bouton_go.dessine_bouton()
 
 ecran.listen()
 ecran.onscreenclick(clic)
