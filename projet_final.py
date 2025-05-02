@@ -21,7 +21,7 @@ class Trajet:
         return self._distance
 
     def __str__(self):
-        return f"{self._nom}: {self._distance}m"
+        return f"{self._nom}: {self._distance:.2f}m"
 
 
 class Station:
@@ -92,6 +92,7 @@ class Bouton:
         self._tortue.penup()
 
     def dessine_bouton(self):
+        t.tracer(0, 0)
         self._tortue.goto(self._pos_bouton)
         self._tortue.color(self._couleur)
         self._tortue.begin_fill()
@@ -459,19 +460,29 @@ def dessine_ile():
 
 
 def changer_options_trajets():
+    if len(trajets) == 0:
+        return
+    cacher_options()
+    bouton_go.dessine_bouton()
     for i in range(len(trajets)):
         bouton = boutons_trajets[i]
         trajet = trajets[i]
+        bouton.change_nom(trajet.__str__())
+        bouton.dessine_bouton()
 
 
-def dessine_animations(liste_de_positions):
-    """Dessine le chemin à faire selon une liste de position"""
-    tortue_animation_options.penup()
-    tortue_animation_options.goto(liste_de_positions[0])
-    tortue_animation_options.pendown()
+def dessine_trajet_choisi():
+    """Dessine le trajet à l'écran"""
+    liste_de_positions = trajets[choix_trajet].get_liste_positions()
+    t.tracer(1, 3)
+    tortue_preview_trajet.color(couleurs_boutons_trajets[choix_trajet])
+    tortue_preview_trajet.penup()
+    tortue_preview_trajet.clear()
+    tortue_preview_trajet.goto(liste_de_positions[0])
+    tortue_preview_trajet.pendown()
 
     for position in range(len(liste_de_positions)):
-        tortue_animation_options.goto(liste_de_positions[position])
+        tortue_preview_trajet.goto(liste_de_positions[position])
 
 
 def choix_station(x, y):
@@ -493,31 +504,30 @@ def choix_station(x, y):
     return None
 
 
-def dans_rectangle(x, y, min_x, max_x, min_y, max_y):
-    """Retourne un booléen qui correspond à si le point (x, y) est dans
-    la zone spécifiée par les paramètres (on assume un rectangle)"""
-    return (min_x <= x <= max_x) and (min_y <= y <= max_y)
-
-
 def clic(x, y):
     """Gère les cas possibles lorsque l'usager clique sur l'écran"""
     global choix_depart
+    global choix_trajet
     # Différents boutons possibles
     if bouton_generer.clic_dans_bouton(x, y):
         generer_trajets()
-        print(list(trajet.__str__() for trajet in trajets))
+        changer_options_trajets()
+        choix_trajet = 0
+        dessine_trajet_choisi()
     elif bouton_go.clic_dans_bouton(x, y):
         print("go")
     elif choix_station(x, y) != None:
+        cacher_options()
         return
     elif clic_boutons_trajets(x, y) != None:
         return
     else:
         choix_depart = (x, y)
         t.tracer(1, 3)
-        # tortue_cercle_depart.goto(x, y)
-        # tortue_cercle_depart.showturtle()
+        tortue_cercle_depart.goto(x, y)
+        tortue_cercle_depart.showturtle()
         texte_depart_arrivee()
+        cacher_options()
 
 
 def texte_depart_arrivee():
@@ -594,8 +604,12 @@ def creer_boutons_trajets():
             )
         )
 
-        for bouton in boutons_trajets:
-            bouton.dessine_bouton()
+
+def cacher_options():
+    bouton_go.efface_bouton()
+    tortue_preview_trajet.clear()
+    for bouton in boutons_trajets:
+        bouton.efface_bouton()
 
 
 def clic_boutons_trajets(x, y):
@@ -603,9 +617,8 @@ def clic_boutons_trajets(x, y):
     for i in range(len(boutons_trajets)):
         if boutons_trajets[i].clic_dans_bouton(x, y):
             choix_trajet = i
-            print(choix_trajet)
+            dessine_trajet_choisi()
             return i
-
     return None
 
 
@@ -631,7 +644,7 @@ POS_TEXTE_DEPART = (-(LARGEUR / 2) + GAP_LARGEUR * 2, -HAUTEUR / 6)
 POS_TEXTE_ARRIVEE = (POS_TEXTE_DEPART[0], POS_TEXTE_DEPART[1] - GAP_TEXTE)
 POS_TEXTE_GENERER = (POS_TEXTE_DEPART[0] + 10, POS_TEXTE_ARRIVEE[1] - GAP_TEXTE)
 POS_1ER_TEXTE_TRAJET = (POS_TEXTE_GENERER[0] + 200, POS_TEXTE_ARRIVEE[1])
-POS_TEXTE_GO = (POS_1ER_TEXTE_TRAJET[0] + 10, POS_TEXTE_GENERER[1])
+POS_TEXTE_GO = (POS_1ER_TEXTE_TRAJET[0] + 45, POS_TEXTE_GENERER[1])
 
 POS_1ER_BOUTON_TRAJET = (
     POS_1ER_TEXTE_TRAJET[0] - GAP_TEXTE,
@@ -702,13 +715,6 @@ tortue_input_arrivee.penup()
 tortue_input_arrivee.color("aqua")
 tortue_input_arrivee.hideturtle()
 
-# tortue_cercle_depart = t.Turtle(shape="ami_1.gif")
-# tortue_cercle_depart.shapesize(0.5)
-# tortue_cercle_depart.speed(0)
-# tortue_cercle_depart.penup()
-# tortue_cercle_depart.color("red")
-# tortue_cercle_depart.hideturtle()
-
 # Implémentation des options de trajets
 tortue_options_trajets = t.Turtle()
 tortue_options_trajets.hideturtle()
@@ -732,13 +738,11 @@ tortue_anim.color("#056cf1")
 tortue_anim.penup()
 tortue_anim.pensize(5)
 # Implémentation des animations des options
-tortue_animation_options = t.Turtle()
-tortue_animation_options.hideturtle()
-tortue_animation_options.color("#056cf1")
-tortue_animation_options.penup()
-tortue_animation_options.pensize(5)
-
-# l = [(0, 0), (0, 100), (100, 100), (100, 0), (0, 0)]
+tortue_preview_trajet = t.Turtle()
+tortue_preview_trajet.hideturtle()
+tortue_preview_trajet.speed(0)
+tortue_preview_trajet.penup()
+tortue_preview_trajet.pensize(5)
 
 lire_fichier_metro()
 lire_fichier_ile()
@@ -750,7 +754,6 @@ dessine_stations()
 texte_depart_arrivee()
 creer_boutons_trajets()
 bouton_generer.dessine_bouton()
-bouton_go.dessine_bouton()
 
 ecran.listen()
 ecran.onscreenclick(clic)
