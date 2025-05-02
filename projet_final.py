@@ -504,12 +504,12 @@ def texte_trajet():
     """Affiche toutes les stations parcourues par le trajet choisi"""
     tortue_texte_trajet.goto(POS_TEXTE_STATIONS)
     trajet = trajets[choix_trajet]
-    tortue_texte_trajet.write(trajet, font=("Arial", 15, "bold"))
-    # noms = [station.__str__() for station in trajet.get_liste_stations()]
-    # tortue_texte_trajet.write(
-    #     f"Trajet: {', '.join(noms)}. Distance: {trajet.get_distance():.2f}",
-    #     font=("Arial", 6, "bold"),
-    # )
+    noms = [station.__str__() for station in trajet.get_liste_stations()]
+    noms = "\n- ".join(noms)
+    tortue_texte_trajet.write(
+        f"{trajet}\n- {noms}",
+        font=("Arial", 12, "bold"),
+    )
 
 
 def animation_déplacement():
@@ -554,10 +554,12 @@ def animation_déplacement():
         tortue_personnage.goto((522, tortue_personnage.ycor() + 50))
         time.sleep(0.5)
     else:
-        tortue_personnage.goto((tortue_personnage.xcor() - 20, tortue_personnage.ycor()))
-    
+        tortue_personnage.goto(
+            (tortue_personnage.xcor() - 20, tortue_personnage.ycor())
+        )
+
     tortue_personnage.speed(2)
-    for i in range(3): # saut du personnage
+    for i in range(3):  # saut du personnage
         tortue_personnage.goto(
             (tortue_personnage.xcor(), tortue_personnage.ycor() + 60)
         )
@@ -572,10 +574,10 @@ def animation_déplacement():
         tortue_personnage.hideturtle()
         time.sleep(1)
         tortue_requin.speed(2)
-        for i in range(3): # saut du requin
+        for i in range(3):  # saut du requin
             tortue_requin.goto((522, tortue_requin.ycor() + 60))
             tortue_requin.goto((522, tortue_requin.ycor() - 60))
-        
+
         # il va se cacher
         tortue_requin.speed(3)
         time.sleep(0.5)
@@ -643,6 +645,7 @@ def choix_station(x, y):
             return station
 
     return None
+
 
 def clic_boutons_trajets(x, y):
     """Vérifie si un des boutons de trajets a été cliqué"""
@@ -725,7 +728,7 @@ Le Métro
 
 
 # Constantes pour l'écran
-LARGEUR = 1800
+LARGEUR = 1920
 HAUTEUR = 1000
 
 # Configuration des positions des objets sur l'écran
@@ -743,7 +746,7 @@ POS_TEXTE_ARRIVEE = (POS_TEXTE_DEPART[0], POS_TEXTE_DEPART[1] - GAP_TEXTE)
 POS_TEXTE_GENERER = (POS_TEXTE_DEPART[0] + 10, POS_TEXTE_ARRIVEE[1] - GAP_TEXTE)
 POS_1ER_TEXTE_TRAJET = (POS_TEXTE_GENERER[0] + 200, POS_TEXTE_ARRIVEE[1])
 POS_TEXTE_GO = (POS_1ER_TEXTE_TRAJET[0] + 45, POS_TEXTE_GENERER[1])
-POS_TEXTE_STATIONS = (-(LARGEUR / 2 - GAP_LARGEUR), (HAUTEUR / 2 - GAP_HAUTEUR / 2))
+POS_TEXTE_STATIONS = (-(LARGEUR / 2 - GAP_LARGEUR), (POS_TEXTE_DEPART[1] + 40))
 
 POS_1ER_BOUTON_TRAJET = (
     POS_1ER_TEXTE_TRAJET[0] - GAP_TEXTE,
