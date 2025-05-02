@@ -269,17 +269,17 @@ def conversion_pos():
         )
 
     # Trouver le ratio pour convertir des pixels en mètres
-    # Utilisation de deux stations dont la distance est connue
-    dist_m = graphe_metro.sommet("Montmorency").poids(
-        graphe_metro.sommet("De la Concorde")
-    )
+    # Utilisation de moyenne de distance entre les stations
+    dist_m_tot = 0
+    dist_px_tot = 0
+    for station_a, station_b, dist_m in graphe_metro.listeAretes(True):
+        dist_m_tot += dist_m
+        dist_px_tot += distance(
+            stations[station_a].get_position(), stations[station_b].get_position()
+        )
 
-    dist_px = distance(
-        stations["Montmorency"].get_position(),
-        stations["De la Concorde"].get_position(),
-    )
     global ratio_m_pixel
-    ratio_m_pixel = dist_m / dist_px
+    ratio_m_pixel = dist_m_tot / dist_px_tot
 
 
 # Fonctions de graphes / trajets

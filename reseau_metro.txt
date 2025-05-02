@@ -30,25 +30,25 @@ Honoré-Beaugrand(45.59690601105572, -73.53616273612703)Radisson*716.99%verte=ri
 Jean-Drapeau(45.5125115109037, -73.53275360012107)Berri-UQAM*2362.10&Longueuil*1572.10%jaune=center!
 Jean-Talon(45.53962155453471, -73.61391869254315)Beaubien*712.10&De Castelnau*471.60&Fabre*839.60&Jarry*977.10%bleue$orange
 Jarry(45.54317627925457, -73.62870465000702)Crémazie*825.60&Jean-Talon*977.10%orange
-Joliette(45.54705407604158, -73.5522483186083)Pie-IX*766.88&Préfontaine*1003.95%verte=right
+Joliette(45.54702826366126, -73.55149839246775)Pie-IX*766.88&Préfontaine*1003.95%verte=right
 Jolicoeur(45.456959918306445, -73.58191609861242)Monk*1062.85&Verdun*761.39%verte=right
 L'Assomption(45.56933219450834, -73.54736265583931)Cadillac*781.69&Viau*895.87%verte=right
 Langelier(45.58279889374338, -73.54387289689205)Cadillac*518.51&Radisson*621.79%verte=right
 LaSalle(45.47078387668829, -73.5659081574753)Charlevoix*707.25&De l'Église*812.30%verte
-Laurier(45.527122442329926, -73.58634959599692)Mont-Royal*932.10&Rosemont*746.10%orange
+Laurier(45.527122442329926, -73.58634959599692)Mont-Royal*350&Rosemont*746.10%orange
 Lionel-Groulx(45.48284553457747, -73.5801148437035)Atwater*1387.74&Charlevoix*1077.31&Georges-Vanier*758.60&Place-Saint-Henri*579.60%orange$verte
 Longueuil(45.52486652235229, -73.52203511856905)Jean-Drapeau*1572.10%jaune
 Lucien-L'Allier(45.495046660169315, -73.57116588593638)Bonaventure*381.60&Georges-Vanier*530.60%orange
 McGill(45.50404316223521, -73.57175459497526)Peel*296.52&Place-des-Arts*345.69%verte=right
 Monk(45.45113793597787, -73.59369024231648)Angrignon*844.29&Jolicoeur*1062.85%verte=right
-Mont-Royal(45.524540995265234, -73.58137979800767)Laurier*932.10&Sherbrooke*932.10%orange
+Mont-Royal(45.524540995265234, -73.58137979800767)Laurier*350&Sherbrooke*932.10%orange
 Montmorency(45.558458178795746, -73.72222663530799)De la Concorde*847.60%orange=right
 Namur(45.49500205974604, -73.65357137081895)De la Savane*786.70&Plamondon*988.47%orange
 Outremont(45.52008485268856, -73.61498809615652)Acadie*728.60&Édouard-Montpetit*1090.60%bleue
 Papineau(45.52373599331382, -73.55267315869503)Beaudry*495.00&Frontenac*1157.57%verte=right
 Parc(45.53045484959906, -73.62391165194198)Acadie*727.60&De Castelnau*490.60%bleue=right
 Peel(45.50092730279481, -73.5745084700718)Guy-Concordia*593.14&McGill*296.52%verte=right
-Pie-IX(45.5536842533481, -73.55221797293709)Joliette*766.88&Viau*621.85%verte=right
+Pie-IX(45.554048582597154, -73.55183846847306)Joliette*766.88&Viau*621.85%verte=right
 Place-d'Armes(45.50576434313652, -73.56030338472793)Champ-de-Mars*370.60&Square-Victoria-OACI*356.60%orange
 Place-des-Arts(45.50780216925632, -73.5693345229893)McGill*345.69&Saint-Laurent*354.38%verte=right
 Place-Saint-Henri(45.47708526407733, -73.58610036664305)Lionel-Groulx*579.60&Vendôme*1450.88%orange=right
