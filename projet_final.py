@@ -504,12 +504,12 @@ def texte_trajet():
     """Affiche toutes les stations parcourues par le trajet choisi"""
     tortue_texte_trajet.goto(POS_TEXTE_STATIONS)
     trajet = trajets[choix_trajet]
-    tortue_texte_trajet.write(trajet, font=("Arial", 15, "bold"))
-    # noms = [station.__str__() for station in trajet.get_liste_stations()]
-    # tortue_texte_trajet.write(
-    #     f"Trajet: {', '.join(noms)}. Distance: {trajet.get_distance():.2f}",
-    #     font=("Arial", 6, "bold"),
-    # )
+    noms = [station.__str__() for station in trajet.get_liste_stations()]
+    noms = "\n- ".join(noms)
+    tortue_texte_trajet.write(
+        f"{trajet}\n- {noms}",
+        font=("Arial", 12, "bold"),
+    )
 
 
 def animation_déplacement():
@@ -721,7 +721,7 @@ POS_TEXTE_ARRIVEE = (POS_TEXTE_DEPART[0], POS_TEXTE_DEPART[1] - GAP_TEXTE)
 POS_TEXTE_GENERER = (POS_TEXTE_DEPART[0] + 10, POS_TEXTE_ARRIVEE[1] - GAP_TEXTE)
 POS_1ER_TEXTE_TRAJET = (POS_TEXTE_GENERER[0] + 200, POS_TEXTE_ARRIVEE[1])
 POS_TEXTE_GO = (POS_1ER_TEXTE_TRAJET[0] + 45, POS_TEXTE_GENERER[1])
-POS_TEXTE_STATIONS = (-(LARGEUR / 2 - GAP_LARGEUR), (HAUTEUR / 2 - GAP_HAUTEUR / 2))
+POS_TEXTE_STATIONS = (-(LARGEUR / 2 - GAP_LARGEUR), (POS_TEXTE_DEPART[1] + 40))
 
 POS_1ER_BOUTON_TRAJET = (
     POS_1ER_TEXTE_TRAJET[0] - GAP_TEXTE,
