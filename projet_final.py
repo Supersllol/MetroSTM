@@ -534,7 +534,7 @@ def animation_déplacement():
     if len(liste_de_positions) != 1:
         time.sleep(0.5)
         # Changer de forme
-        tortue_personnage.shape("metro_1.gif")
+        tortue_personnage.shape("metro_2.gif")
         tortue_personnage.speed(2)
 
         # déplacements dans les stations
@@ -550,6 +550,7 @@ def animation_déplacement():
 
     # jump, jump, jump
     tortue_personnage.speed(1)
+    
     tortue_personnage.goto((tortue_personnage.xcor() - 20, tortue_personnage.ycor()))
     tortue_personnage.speed(2)
     for i in range(3):
@@ -703,8 +704,8 @@ Le Métro
 
 
 # Constantes pour l'écran
-LARGEUR = 1920
-HAUTEUR = 1010
+LARGEUR = 1800
+HAUTEUR = 1000
 
 # Configuration des positions des objets sur l'écran
 GAP_HAUTEUR = 50
@@ -731,8 +732,8 @@ POS_BOUTON_GENERER = (POS_TEXTE_GENERER[0] - 15, POS_TEXTE_GENERER[1] - 1)
 POS_BOUTON_GO = (POS_TEXTE_GO[0] - 15, POS_TEXTE_GO[1] - 1)
 
 # Constantes utiles
-COULEUR_LACS = "#6EA6D4"
-COULEUR_TERRE = "#D7E7F6"
+COULEUR_LACS = "#0080E3"
+COULEUR_TERRE = "#81E3FF"
 
 RAYON_CLIC = 6
 
@@ -747,7 +748,7 @@ couleurs_lignes = {
 
 # Configuration de l'écran
 ecran = t.Screen()
-ecran.title("Métro de la STM")
+ecran.title("Mission : Impossible - Aller dans le métro de Montréal")
 ecran.setup(LARGEUR, HAUTEUR)
 ecran.bgcolor(COULEUR_TERRE)
 
@@ -760,7 +761,7 @@ lacs = []
 ile = []
 trajets = []
 boutons_trajets = []
-couleurs_boutons_trajets = ["#FF0000", "#8B00FF", "#AAFF00"]
+couleurs_boutons_trajets = ["#ff1282", "#7823dd", "#FFE200"]
 bouton_generer = Bouton(
     "Générer",
     POS_BOUTON_GENERER,
@@ -781,7 +782,11 @@ suit_trajet = False
 
 # Enregistrer les deux gif
 t.register_shape("ami_1.gif")
-t.register_shape("metro_1.gif")
+t.register_shape("metro_2.gif")
+t.register_shape("oh-ho_1.gif")
+t.register_shape("oh-ho_2.gif")
+t.register_shape("oh-ho_3.gif")
+t.register_shape("oh-ho_4.gif")
 
 # Tortue qui écrit le texte qui montre les choix
 tortue_texte_choix = t.Turtle()
@@ -830,10 +835,18 @@ bouton_generer.dessine_bouton()
 # Mise après les lacs pour pouvoir passer par-dessus
 tortue_personnage = t.Turtle(shape="ami_1.gif")
 tortue_personnage.speed(0)
-tortue_personnage.color("#056CF1")
-tortue_personnage.pensize(5)
+tortue_personnage.color("#09c4ea")
+tortue_personnage.pensize(4)
 tortue_personnage.penup()
 tortue_personnage.hideturtle()
+
+tortue_requin = t.Turtle()
+tortue_requin.hideturtle()
+tortue_requin.penup()
+tortue_requin.goto(525, -550)
+tortue_requin.shape("oh-ho_1.gif")
+tortue_requin.speed(3)
+tortue_requin.showturtle()
 
 # Le clic de l'usager est ce qui détermine ce qui se passe
 ecran.listen()
