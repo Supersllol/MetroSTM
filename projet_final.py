@@ -1,3 +1,5 @@
+# Projet de métro: Adrien Cordier, Hans Hamelin, Simon Lacroix, Antoni Lafontaine
+
 from graphelib import Graphe
 from pilefile import Pile
 import turtle as t
@@ -721,7 +723,7 @@ couleurs_lignes = {
 
 # Configuration de l'écran
 ecran = t.Screen()
-ecran.title("Métro de la SDF")
+ecran.title("Métro de la STM")
 ecran.setup(LARGEUR, HAUTEUR)
 ecran.bgcolor(COULEUR_TERRE)
 
