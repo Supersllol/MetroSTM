@@ -6,9 +6,10 @@ import turtle as t
 import math
 import time
 
-'''
+"""
 Classes
-'''
+"""
+
 
 class Station:
     """Classe représentant une station de métro"""
@@ -342,10 +343,10 @@ def generer_trajets():
     Peut générer jusqu'à 3 trajets (marche, chemin le plus court, rester sur la même ligne)
     """
     global trajets
+    trajets = []
     # Si choix pas valides, sortir
     if choix_depart == None or choix_arrivee == None:
         return
-    trajets = []
     depart, dist_depart = station_plus_proche(choix_depart)
     dist_marche = dist_depart * ratio_m_pixel
     # Si on peut marcher on rajoute l'option
@@ -388,9 +389,11 @@ def generer_trajets():
         positions.append(stations[sommet.__str__()])
     trajets.append(Trajet("Même couleur", dist_marche + dist_metro, positions))
 
-'''
+
+"""
 # Fonctions de dessin
-'''
+"""
+
 
 def dessine_stations():
     """Dessine les stations et les lignes de métro avec leurs noms
@@ -471,6 +474,8 @@ def dessine_ile():
 
 def dessine_trajet_choisi():
     """Dessine le trajet à l'écran"""
+    if len(trajets) == 0:
+        return
     liste_de_positions = [
         station.get_position() for station in trajets[choix_trajet].get_liste_stations()
     ]
@@ -499,11 +504,12 @@ def texte_trajet():
     """Affiche toutes les stations parcourues par le trajet choisi"""
     tortue_texte_trajet.goto(POS_TEXTE_STATIONS)
     trajet = trajets[choix_trajet]
-    noms = [station.__str__() for station in trajet.get_liste_stations()]
-    tortue_texte_trajet.write(
-        f"Trajet: {', '.join(noms)}. Distance: {trajet.get_distance():.2f}",
-        font=("Arial", 6, "bold"),
-    )
+    tortue_texte_trajet.write(trajet, font=("Arial", 15, "bold"))
+    # noms = [station.__str__() for station in trajet.get_liste_stations()]
+    # tortue_texte_trajet.write(
+    #     f"Trajet: {', '.join(noms)}. Distance: {trajet.get_distance():.2f}",
+    #     font=("Arial", 6, "bold"),
+    # )
 
 
 def animation_déplacement():
@@ -513,7 +519,7 @@ def animation_déplacement():
     global suit_trajet
     suit_trajet = True
     cacher_options()
-    # texte_trajet()
+    texte_trajet()
     t.tracer(1, 15)
     liste_de_positions = [
         station.get_position() for station in trajets[choix_trajet].get_liste_stations()
@@ -538,20 +544,13 @@ def animation_déplacement():
     tortue_personnage.penup()
     # Recacher les choses une fois le trajet fini
     tortue_cercle_arrivee.hideturtle()
-    choix_depart = tortue_personnage.pos()
-    choix_arrivee = None
-    t.tracer(0, 0)
-    texte_depart_arrivee()
     time.sleep(0.5)
-    t.tracer(1, 15)
     tortue_personnage.shape("ami_1.gif")
     tortue_personnage.speed(2)
 
     # jump, jump, jump
     tortue_personnage.speed(1)
-    tortue_personnage.goto(
-            (tortue_personnage.xcor() -20, tortue_personnage.ycor())
-        )
+    tortue_personnage.goto((tortue_personnage.xcor() - 20, tortue_personnage.ycor()))
     tortue_personnage.speed(2)
     for i in range(3):
         tortue_personnage.goto(
@@ -563,11 +562,15 @@ def animation_déplacement():
     tortue_personnage.speed(0)
     t.tracer(0, 0)
     suit_trajet = False
+    choix_arrivee = None
+    choix_depart = tortue_personnage.pos()
+    texte_depart_arrivee()
 
 
-'''
+"""
 Fonctions gérant les clics de l'usager
-'''
+"""
+
 
 def clic(x, y):
     """Gère les cas possibles lorsque l'usager clique sur l'écran"""
@@ -629,9 +632,11 @@ def clic_boutons_trajets(x, y):
             return i
     return None
 
-'''
+
+"""
 Fonctions gérant l'affichage des trajets possibles
-'''
+"""
+
 
 def creer_boutons_trajets():
     """Crée les 3 boutons de trajets qui peuvent être affichés"""
@@ -670,9 +675,11 @@ def cacher_options():
     for bouton in boutons_trajets:
         bouton.efface_bouton()
 
-'''
+
+"""
 Fonctions gérant l'affichage des trajets possibles
-'''
+"""
+
 
 def distance(point_a, point_b):
     """Prends deux tuples et retourne la distance entre les deux points"""
