@@ -528,6 +528,7 @@ def animation_déplacement():
     tortue_personnage.shape("ami_1.gif")
     tortue_personnage.speed(1)
     tortue_personnage.pendown()
+    tortue_personnage.color(couleurs_boutons_trajets[choix_trajet])
 
     tortue_personnage.goto(liste_de_positions[0])  # aka la station de départ
     # Si pas seulement marcher (1 station)
