@@ -269,17 +269,17 @@ def conversion_pos():
         )
 
     # Trouver le ratio pour convertir des pixels en mètres
-    # Utilisation de moyenne de distance entre les stations
-    dist_m_tot = 0
-    dist_px_tot = 0
-    for station_a, station_b, dist_m in graphe_metro.listeAretes(True):
-        dist_m_tot += dist_m
-        dist_px_tot += distance(
-            stations[station_a].get_position(), stations[station_b].get_position()
-        )
+    # Utilisation de deux stations dont la distance est connue
+    dist_m = graphe_metro.sommet("Montmorency").poids(
+        graphe_metro.sommet("De la Concorde")
+    )
 
+    dist_px = distance(
+        stations["Montmorency"].get_position(),
+        stations["De la Concorde"].get_position(),
+    )
     global ratio_m_pixel
-    ratio_m_pixel = dist_m_tot / dist_px_tot
+    ratio_m_pixel = dist_m / dist_px
 
 
 # Fonctions de graphes / trajets
@@ -504,12 +504,12 @@ def texte_trajet():
     """Affiche toutes les stations parcourues par le trajet choisi"""
     tortue_texte_trajet.goto(POS_TEXTE_STATIONS)
     trajet = trajets[choix_trajet]
-    noms = [station.__str__() for station in trajet.get_liste_stations()]
-    noms = "\n- ".join(noms)
-    tortue_texte_trajet.write(
-        f"{trajet}\n- {noms}",
-        font=("Arial", 12, "bold"),
-    )
+    tortue_texte_trajet.write(trajet, font=("Arial", 15, "bold"))
+    # noms = [station.__str__() for station in trajet.get_liste_stations()]
+    # tortue_texte_trajet.write(
+    #     f"Trajet: {', '.join(noms)}. Distance: {trajet.get_distance():.2f}",
+    #     font=("Arial", 6, "bold"),
+    # )
 
 
 def animation_déplacement():
@@ -546,20 +546,41 @@ def animation_déplacement():
     tortue_cercle_arrivee.hideturtle()
     time.sleep(0.5)
     tortue_personnage.shape("ami_1.gif")
-    tortue_personnage.speed(2)
 
     # jump, jump, jump
     tortue_personnage.speed(1)
+
+    if trajets[choix_trajet].get_liste_stations()[-1] == stations["Jean-Drapeau"]:
+        tortue_personnage.goto((522, tortue_personnage.ycor() + 50))
+        time.sleep(0.5)
+    else:
+        tortue_personnage.goto((tortue_personnage.xcor() - 20, tortue_personnage.ycor()))
     
-    tortue_personnage.goto((tortue_personnage.xcor() - 20, tortue_personnage.ycor()))
     tortue_personnage.speed(2)
-    for i in range(3):
+    for i in range(3): # saut du personnage
         tortue_personnage.goto(
             (tortue_personnage.xcor(), tortue_personnage.ycor() + 60)
         )
         tortue_personnage.goto(
             (tortue_personnage.xcor(), tortue_personnage.ycor() - 60)
         )
+
+    # le requin
+    if trajets[choix_trajet].get_liste_stations()[-1] == stations["Jean-Drapeau"]:
+        tortue_requin.speed(3)
+        tortue_requin.goto(522, tortue_personnage.ycor())
+        tortue_personnage.hideturtle()
+        time.sleep(1)
+        tortue_requin.speed(2)
+        for i in range(3): # saut du requin
+            tortue_requin.goto((522, tortue_requin.ycor() + 60))
+            tortue_requin.goto((522, tortue_requin.ycor() - 60))
+        
+        # il va se cacher
+        tortue_requin.speed(3)
+        time.sleep(0.5)
+        tortue_requin.goto((522, -550))
+
     tortue_personnage.speed(0)
     t.tracer(0, 0)
     suit_trajet = False
@@ -583,6 +604,7 @@ def clic(x, y):
         return
     tortue_texte_trajet.clear()
     if bouton_generer.clic_dans_bouton(x, y):
+        tortue_personnage.showturtle()
         generer_trajets()
         changer_options_trajets()
         choix_trajet = 0
@@ -621,7 +643,6 @@ def choix_station(x, y):
             return station
 
     return None
-
 
 def clic_boutons_trajets(x, y):
     """Vérifie si un des boutons de trajets a été cliqué"""
@@ -722,7 +743,7 @@ POS_TEXTE_ARRIVEE = (POS_TEXTE_DEPART[0], POS_TEXTE_DEPART[1] - GAP_TEXTE)
 POS_TEXTE_GENERER = (POS_TEXTE_DEPART[0] + 10, POS_TEXTE_ARRIVEE[1] - GAP_TEXTE)
 POS_1ER_TEXTE_TRAJET = (POS_TEXTE_GENERER[0] + 200, POS_TEXTE_ARRIVEE[1])
 POS_TEXTE_GO = (POS_1ER_TEXTE_TRAJET[0] + 45, POS_TEXTE_GENERER[1])
-POS_TEXTE_STATIONS = (-(LARGEUR / 2 - GAP_LARGEUR), (POS_TEXTE_DEPART[1] + 40))
+POS_TEXTE_STATIONS = (-(LARGEUR / 2 - GAP_LARGEUR), (HAUTEUR / 2 - GAP_HAUTEUR / 2))
 
 POS_1ER_BOUTON_TRAJET = (
     POS_1ER_TEXTE_TRAJET[0] - GAP_TEXTE,
@@ -732,8 +753,8 @@ POS_BOUTON_GENERER = (POS_TEXTE_GENERER[0] - 15, POS_TEXTE_GENERER[1] - 1)
 POS_BOUTON_GO = (POS_TEXTE_GO[0] - 15, POS_TEXTE_GO[1] - 1)
 
 # Constantes utiles
-COULEUR_LACS = "#0080E3"
-COULEUR_TERRE = "#81E3FF"
+COULEUR_LACS = "#2EA4FF"
+COULEUR_TERRE = "#94E2F8"
 
 RAYON_CLIC = 6
 
@@ -784,9 +805,6 @@ suit_trajet = False
 t.register_shape("ami_1.gif")
 t.register_shape("metro_2.gif")
 t.register_shape("oh-ho_1.gif")
-t.register_shape("oh-ho_2.gif")
-t.register_shape("oh-ho_3.gif")
-t.register_shape("oh-ho_4.gif")
 
 # Tortue qui écrit le texte qui montre les choix
 tortue_texte_choix = t.Turtle()
@@ -843,9 +861,8 @@ tortue_personnage.hideturtle()
 tortue_requin = t.Turtle()
 tortue_requin.hideturtle()
 tortue_requin.penup()
-tortue_requin.goto(525, -550)
+tortue_requin.goto(522, -550)
 tortue_requin.shape("oh-ho_1.gif")
-tortue_requin.speed(3)
 tortue_requin.showturtle()
 
 # Le clic de l'usager est ce qui détermine ce qui se passe
