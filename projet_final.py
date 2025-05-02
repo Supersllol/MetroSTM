@@ -1,11 +1,69 @@
 from graphelib import Graphe
-from pilefile import Pile, File
+from pilefile import Pile
 import turtle as t
 import math
 import time
 
 
+# Classes
+class Station:
+    """Classe représentant une station de métro"""
+
+    def __init__(self, nom, couleurs, position, alignement, is_down):
+        self._nom = nom
+        self._couleurs = couleurs
+        self._position = position
+        # alignement et is_down servent à placer le nom de la station sur la carte
+        self._alignement = alignement
+        self._is_down = is_down
+
+    def get_nom(self):
+        return self._nom
+
+    def get_couleurs(self):
+        return self._couleurs
+
+    def get_position(self):
+        return self._position
+
+    def get_alignement(self):
+        return self._alignement
+
+    def is_down(self):
+        return self._is_down
+
+    def set_position(self, position):
+        self._position = position
+
+    def __str__(self):
+        return self.get_nom()
+
+
+class Ligne:
+    """Classe représentant une ligne de stations de métro"""
+
+    def __init__(self, nom, couleur, ordre_stations):
+        # ordre_stations est une liste de noms de station selon l'ordre de la ligne
+        self._nom = nom
+        self._couleur = couleur
+        self._ordre_stations = ordre_stations
+
+    def get_nom(self):
+        return self._nom
+
+    def get_couleur(self):
+        return self._couleur
+
+    def get_ordre_stations(self):
+        return self._ordre_stations
+
+    def __str__(self):
+        return f"Ligne {self._nom}: {self._ordre_stations}"
+
+
 class Trajet:
+    """Classe représentant le trajet d'un wagon de métro"""
+
     def __init__(self, nom, distance, liste_stations):
         self._nom = nom
         self._liste_stations = liste_stations
@@ -24,60 +82,9 @@ class Trajet:
         return f"{self._nom}: {self._distance:.2f}m"
 
 
-class Station:
-    def __init__(self, nom, couleurs, position, alignement, isdown):
-        self._nom = nom
-        self._couleurs = couleurs
-        self._position = position
-        self._alignement = alignement
-        self._isdown = isdown
-
-    def get_nom(self):
-        return self._nom
-
-    def get_couleurs(self):
-        return self._couleurs
-
-    def get_position(self):
-        return self._position
-
-    def get_alignement(self):
-        return self._alignement
-
-    def get_alignement(self):
-        return self._alignement
-
-    def is_down(self):
-        return self._isdown
-
-    def set_position(self, position):
-        self._position = position
-
-    def __str__(self):
-        return self.get_nom()
-
-
-class Ligne:
-
-    def __init__(self, nom, couleur, ordre_stations):
-        self._nom = nom
-        self._couleur = couleur
-        self._ordre_stations = ordre_stations
-
-    def get_nom(self):
-        return self._nom
-
-    def get_couleur(self):
-        return self._couleur
-
-    def get_ordre_stations(self):
-        return self._ordre_stations
-
-    def __str__(self):
-        return f"Ligne {self._nom}: {self._ordre_stations}"
-
-
 class Bouton:
+    """Classe représentant un bouton affiché dans le module turtle"""
+
     def __init__(self, nom, pos_bouton, pos_texte, couleur, largeur, hauteur):
         self._nom = nom
         self._pos_bouton = pos_bouton
@@ -97,6 +104,7 @@ class Bouton:
         self._tortue.color(self._couleur)
         self._tortue.begin_fill()
         self._tortue.setheading(0)
+        # Remplir le rectangle correspondant au bouton
         for i in range(2):
             self._tortue.forward(self._largeur)
             self._tortue.left(90)
@@ -111,7 +119,7 @@ class Bouton:
     def clic_dans_bouton(self, x, y):
         if not self._visible:
             return False
-
+        # Si le clic se trouve dans la zone associée au bouton
         return (self._pos_bouton[0] <= x <= self._pos_bouton[0] + self._largeur) and (
             self._pos_bouton[1] <= y <= self._pos_bouton[1] + self._hauteur
         )
@@ -127,117 +135,7 @@ class Bouton:
         self._nom = nom
 
 
-def dijkstra(depart, couleurs):
-    """Retourne un dictionnaire contenant les distances les plus courtes
-    à partir du point de départ pour se rendre à chaque station en passant
-    seulement par les stations de couleurs passées en paramètre"""
-    # Seulement utiliser les stations des couleurs passées en paramètre
-    exterieur = set(
-        station
-        for station in graphe_metro.listeSommets()
-        if (stations[station.__str__()].get_couleurs() & couleurs) != set()
-    )
-    # Algorithme de Dijkstra, mais en gardant en mémoire la station précédente
-    dist = {s: [math.inf, None] for s in exterieur}
-    dist[depart][0] = 0
-    while len(exterieur) > 0:
-        dmin = math.inf
-        for s in exterieur:
-            if dist[s][0] < dmin:
-                (a, dmin) = (s, dist[s][0])
-        exterieur.remove(a)
-        for b in a.listeVoisins():
-            if b in exterieur:
-                new_dist = dist[a][0] + a.poids(b)
-                if dist[b][0] > new_dist:
-                    dist[b] = (new_dist, a)
-    return dist
-
-
-def meilleur_chemin(depart, arrivee, couleurs):
-    """Retourne le chemin le plus court entre la station d'arrivée et de départ
-    sous la forme d'une pile, en passant seulement par les stations des couleurs
-    passées en paramètre. Retourne un tuple avec la pile, la distance et les couleurs
-    des stations parcourues.
-    """
-    # Convertir depart et arrivee en sommets s'ils sont des stations
-    if type(depart) == Station:
-        depart = graphe_metro.sommet(depart.__str__())
-    if type(arrivee) == Station:
-        arrivee = graphe_metro.sommet(arrivee.__str__())
-    dist = dijkstra(depart, couleurs)
-    # Refaire le chemin à l'envers en empilant les précédentes
-    distance, precedent = dist[arrivee]
-    chemin = Pile()
-    couleurs_parcourues = set()
-    chemin.empile(arrivee)
-    while precedent != None:
-        chemin.empile(precedent)
-        couleurs_precedent = stations[precedent.__str__()].get_couleurs()
-        if len(couleurs_precedent) == 1:
-            couleurs_parcourues |= couleurs_precedent
-        precedent = dist[precedent][1]
-    return (chemin, distance, couleurs_parcourues)
-
-
-def station_plus_proche(point):
-    """Retourne la station la plus proche du point, avec la distance avec celle-ci"""
-    best_station, best_dist = None, math.inf
-    for station in stations.values():
-        dist = distance(station.get_position(), point)
-        if dist < best_dist:
-            best_station = station
-            best_dist = dist
-    return (best_station, best_dist)
-
-
-def generer_trajets():
-    global trajets
-    if choix_depart == None or choix_arrivee == None:
-        return
-    trajets = []
-    depart, dist_depart = station_plus_proche(choix_depart)
-    dist_marche = dist_depart * ratio_m_pixel
-    # Si on peut marcher on rajoute l'option
-    dist_direct = distance(choix_depart, choix_arrivee.get_position()) * ratio_m_pixel
-    depart_est_arrivee = depart == choix_arrivee
-    # Assez proche ou si seule option
-    if dist_direct <= DISTANCE_MAX_MARCHER or depart_est_arrivee:
-        trajets.append(Trajet("Marche", dist_direct, [choix_arrivee]))
-    # Si la plus proche est l'arrivée éviter de faire dijkstra
-    if depart_est_arrivee:
-        return
-
-    chemin, dist_metro, couleurs_parcourues = meilleur_chemin(
-        depart, choix_arrivee, {"jaune", "verte", "bleue", "orange"}
-    )
-    positions = []
-    while not chemin.estvide():
-        sommet = chemin.depile()
-        positions.append(stations[sommet.__str__()])
-
-    trajets.append(Trajet("Plus court", dist_marche + dist_metro, positions))
-
-    # Si trajet reste sur la même ligne pas besoin de continuer
-    print(couleurs_parcourues)
-    if len(couleurs_parcourues) == 1:
-        return
-
-    # Si départ et arrivée sur la même ligne, on rajoute l'option de rester sur la même ligne
-    inter_couleurs = depart.get_couleurs() & choix_arrivee.get_couleurs()
-    if inter_couleurs == set():
-        return
-
-    chemin, dist_metro, couleurs_parcourues = meilleur_chemin(
-        depart, choix_arrivee, inter_couleurs
-    )
-    positions = []
-    while not chemin.estvide():
-        sommet = chemin.depile()
-        positions.append(stations[sommet.__str__()])
-    trajets.append(Trajet("Même couleur", dist_marche + dist_metro, positions))
-
-
+# Fonctions de lecture de fichiers et de setup
 def lire_fichier_metro():
     """Lis le fichier contenant l'information sur le réseau de métro. Construit un
     graphe reliant les stations avec les distances entre elles, crée des stations
@@ -251,23 +149,23 @@ def lire_fichier_metro():
 
             ligne_og = ligne
             ligne = ligne.strip()
-            # Ordre des stations si commence par @
+            # Si commence par @, c'est l'ordre des stations d'une ligne
             if ligne[0] == "@":
                 ligne = ligne[1:]
                 ligne = ligne.split("*")
                 nom = ligne[0]
                 lignes.append(Ligne(nom, couleurs_lignes[nom], ligne[1:]))
                 continue
-
+            # Nom de la station et sa position
             depart, ligne = ligne.split("(")
             position, ligne = ligne.split(")")
             position = tuple(float(a) for a in position.split(","))
-
+            # Station connectées et couleurs de la station principale
             connexions, couleurs = ligne.split("%")
             connexions = tuple(tuple(i.split("*")) for i in connexions.split("&"))
             couleurs = couleurs.split("=")[0]
             couleurs = set(couleurs.split("$"))
-
+            # Alignement du nom de la station
             alignement = ligne.split("=")
             if len(alignement) == 2:
                 alignement2 = alignement[1].split("!")
@@ -282,9 +180,9 @@ def lire_fichier_metro():
                 isdown = True
             else:
                 isdown = False
-
+            # Ajout au dictionnaire de la nouvelle station
             stations[depart] = Station(depart, couleurs, position, alignement, isdown)
-
+            # Ajout au graphe des nouvelles arêtes
             for connexion in connexions:
                 if len(connexion) != 2:
                     continue
@@ -312,11 +210,6 @@ def lire_fichier_ile():
                 continue
 
             courante.append(tuple(float(coord) for coord in ligne.split(",")))
-
-
-def distance(point_a, point_b):
-    """Prends deux tuples et retourne la distance entre les deux points"""
-    return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
 
 
 def conversion_pos():
@@ -371,6 +264,7 @@ def conversion_pos():
         )
 
     # Trouver le ratio pour convertir des pixels en mètres
+    # Utilisation de deux stations dont la distance est connue
     dist_m = graphe_metro.sommet("Montmorency").poids(
         graphe_metro.sommet("De la Concorde")
     )
@@ -383,6 +277,115 @@ def conversion_pos():
     ratio_m_pixel = dist_m / dist_px
 
 
+# Fonctions de graphes / trajets
+def dijkstra(depart, couleurs):
+    """Retourne un dictionnaire contenant les distances les plus courtes
+    à partir du point de départ pour se rendre à chaque station en passant
+    seulement par les stations de couleurs passées en paramètre"""
+    # Seulement utiliser les stations des couleurs passées en paramètre
+    exterieur = set(
+        station
+        for station in graphe_metro.listeSommets()
+        if (stations[station.__str__()].get_couleurs() & couleurs) != set()
+    )
+    # Algorithme de Dijkstra, mais en gardant en mémoire la station précédente
+    dist = {s: [math.inf, None] for s in exterieur}
+    dist[depart][0] = 0
+    while len(exterieur) > 0:
+        dmin = math.inf
+        for s in exterieur:
+            if dist[s][0] < dmin:
+                (a, dmin) = (s, dist[s][0])
+        exterieur.remove(a)
+        for b in a.listeVoisins():
+            if b in exterieur:
+                new_dist = dist[a][0] + a.poids(b)
+                if dist[b][0] > new_dist:
+                    dist[b] = (new_dist, a)
+    return dist
+
+
+def meilleur_chemin(depart, arrivee, couleurs):
+    """Retourne le chemin le plus court entre la station d'arrivée et de départ
+    sous la forme d'une pile, en passant seulement par les stations des couleurs
+    passées en paramètre. Retourne un tuple avec la pile, la distance et les couleurs
+    des stations parcourues.
+    """
+    # Convertir depart et arrivee en sommets s'ils sont des stations
+    if type(depart) == Station:
+        depart = graphe_metro.sommet(depart.__str__())
+    if type(arrivee) == Station:
+        arrivee = graphe_metro.sommet(arrivee.__str__())
+    dist = dijkstra(depart, couleurs)
+    # Refaire le chemin à l'envers en empilant les précédentes
+    distance, precedent = dist[arrivee]
+    chemin = Pile()
+    couleurs_parcourues = set()
+    # Avant de commencer à dépiler on met l'arrivée
+    chemin.empile(arrivee)
+    while precedent != None:
+        chemin.empile(precedent)
+        couleurs_precedent = stations[precedent.__str__()].get_couleurs()
+        # Ne compte pas les correspondances parmi les couleurs parcourues, serait trop
+        if len(couleurs_precedent) == 1:
+            couleurs_parcourues |= couleurs_precedent
+        precedent = dist[precedent][1]
+    return (chemin, distance, couleurs_parcourues)
+
+
+def generer_trajets():
+    """Génère les trajets possibles entre le choix de point de départ et la station d'arrivée.
+    Peut générer jusqu'à 3 trajets (marche, chemin le plus court, rester sur la même ligne)
+    """
+    global trajets
+    # Si choix pas valides, sortir
+    if choix_depart == None or choix_arrivee == None:
+        return
+    trajets = []
+    depart, dist_depart = station_plus_proche(choix_depart)
+    dist_marche = dist_depart * ratio_m_pixel
+    # Si on peut marcher on rajoute l'option
+    dist_direct = distance(choix_depart, choix_arrivee.get_position()) * ratio_m_pixel
+    depart_est_arrivee = depart == choix_arrivee
+    # Assez proche ou si seule option
+    if dist_direct <= DISTANCE_MAX_MARCHER or depart_est_arrivee:
+        trajets.append(Trajet("Marche", dist_direct, [choix_arrivee]))
+    # Si la plus proche est l'arrivée éviter de faire dijkstra, aller directement
+    if depart_est_arrivee:
+        return
+
+    # Trouver le meilleur chemin entre départ et arrivée, 4 couleurs acceptées
+    chemin, dist_metro, couleurs_parcourues = meilleur_chemin(
+        depart, choix_arrivee, {"jaune", "verte", "bleue", "orange"}
+    )
+    positions = []
+    while not chemin.estvide():
+        sommet = chemin.depile()
+        positions.append(stations[sommet.__str__()])
+
+    trajets.append(Trajet("Plus court", dist_marche + dist_metro, positions))
+
+    # Si trajet reste sur la même ligne pas besoin de continuer, déjà le plus court
+    if len(couleurs_parcourues) == 1:
+        return
+
+    # Si départ et arrivée sur la même ligne, on rajoute l'option de rester sur la même ligne
+    inter_couleurs = depart.get_couleurs() & choix_arrivee.get_couleurs()
+    # S'il n'y a pas de couleurs en commun
+    if inter_couleurs == set():
+        return
+    # Refaire dijkstra seulement avec la couleur en commun
+    chemin, dist_metro, couleurs_parcourues = meilleur_chemin(
+        depart, choix_arrivee, inter_couleurs
+    )
+    positions = []
+    while not chemin.estvide():
+        sommet = chemin.depile()
+        positions.append(stations[sommet.__str__()])
+    trajets.append(Trajet("Même couleur", dist_marche + dist_metro, positions))
+
+
+# Fonctions de dessin
 def dessine_stations():
     """Dessine les stations et les lignes de métro avec leurs noms
     sur l'écran"""
@@ -460,18 +463,6 @@ def dessine_ile():
     tortue.end_fill()
 
 
-def changer_options_trajets():
-    if len(trajets) == 0:
-        return
-    cacher_options()
-    bouton_go.dessine_bouton()
-    for i in range(len(trajets)):
-        bouton = boutons_trajets[i]
-        trajet = trajets[i]
-        bouton.change_nom(trajet.__str__())
-        bouton.dessine_bouton()
-
-
 def dessine_trajet_choisi():
     """Dessine le trajet à l'écran"""
     liste_de_positions = [
@@ -488,54 +479,6 @@ def dessine_trajet_choisi():
         tortue_preview_trajet.goto(liste_de_positions[position])
 
 
-def choix_station(x, y):
-    """Retourne la station qui correspond à l'endroit cliqué (ou None si aucune)"""
-    for station in stations.values():
-        pos = station.get_position()
-        # Si les coordonnées du clic se situent dans un rectangle autour de la station
-        if (pos[0] - RAYON_CLIC <= x <= pos[0] + RAYON_CLIC) and (
-            pos[1] - RAYON_CLIC <= y <= pos[1] + RAYON_CLIC
-        ):
-            global choix_arrivee
-            t.tracer(1, 3)
-            tortue_cercle_arrivee.goto(pos)
-            tortue_cercle_arrivee.showturtle()
-            choix_arrivee = station
-            texte_depart_arrivee()
-            return station
-
-    return None
-
-
-def clic(x, y):
-    """Gère les cas possibles lorsque l'usager clique sur l'écran"""
-    global choix_depart
-    global choix_trajet
-    # Différents boutons possibles
-    if suit_trajet:
-        return
-    tortue_texte_trajet.clear()
-    if bouton_generer.clic_dans_bouton(x, y):
-        generer_trajets()
-        changer_options_trajets()
-        choix_trajet = 0
-        dessine_trajet_choisi()
-    elif bouton_go.clic_dans_bouton(x, y):
-        animation_déplacement()
-    elif choix_station(x, y) != None:
-        cacher_options()
-        return
-    elif clic_boutons_trajets(x, y) != None:
-        return
-    else:
-        choix_depart = (x, y)
-        t.tracer(1, 3)
-        tortue_personnage.goto(x, y)
-        tortue_personnage.showturtle()
-        texte_depart_arrivee()
-        cacher_options()
-
-
 def texte_depart_arrivee():
     """Affiche à l'écran les choix de station de départ et d'arrivée"""
     t.tracer(0)
@@ -547,6 +490,7 @@ def texte_depart_arrivee():
 
 
 def texte_trajet():
+    """Affiche toutes les stations parcourues par le trajet choisi"""
     tortue_texte_trajet.goto(POS_TEXTE_STATIONS)
     trajet = trajets[choix_trajet]
     noms = [station.__str__() for station in trajet.get_liste_stations()]
@@ -573,12 +517,11 @@ def animation_déplacement():
     tortue_personnage.speed(1)
     tortue_personnage.pendown()
 
-    # Si seulement marcher
-    if len(liste_de_positions) == 1:
-        tortue_personnage.goto(liste_de_positions[0])
-    else:
-        tortue_personnage.goto(liste_de_positions[0])  # aka la station de départ
+    tortue_personnage.goto(liste_de_positions[0])  # aka la station de départ
+    # Si pas seulement marcher (1 station)
+    if len(liste_de_positions) != 1:
         time.sleep(0.5)
+        # Changer de forme
         tortue_personnage.shape("metro_1.gif")
         tortue_personnage.speed(2)
 
@@ -587,6 +530,7 @@ def animation_déplacement():
             tortue_personnage.goto(liste_de_positions[position])
 
     tortue_personnage.penup()
+    # Recacher les choses une fois le trajet fini
     tortue_cercle_arrivee.hideturtle()
     choix_depart = tortue_personnage.pos()
     choix_arrivee = None
@@ -610,7 +554,71 @@ def animation_déplacement():
     suit_trajet = False
 
 
+# Fonctions gérant les clics de l'usager
+def clic(x, y):
+    """Gère les cas possibles lorsque l'usager clique sur l'écran"""
+    global choix_depart
+    global choix_trajet
+    # Différents boutons possibles
+    # Si présentement en train de suivre le trajet, clic ne fait rien
+    if suit_trajet:
+        return
+    tortue_texte_trajet.clear()
+    if bouton_generer.clic_dans_bouton(x, y):
+        generer_trajets()
+        changer_options_trajets()
+        choix_trajet = 0
+        dessine_trajet_choisi()
+    elif bouton_go.clic_dans_bouton(x, y):
+        animation_déplacement()
+    elif choix_station(x, y) != None:
+        cacher_options()
+        return
+    elif clic_boutons_trajets(x, y) != None:
+        return
+    else:
+        # Si aucune des autres options, utiliser la coordonnée comme point de départ
+        choix_depart = (x, y)
+        t.tracer(1, 3)
+        tortue_personnage.goto(x, y)
+        tortue_personnage.showturtle()
+        texte_depart_arrivee()
+        cacher_options()
+
+
+def choix_station(x, y):
+    """Retourne la station qui correspond à l'endroit cliqué (ou None si aucune)"""
+    for station in stations.values():
+        pos = station.get_position()
+        # Si les coordonnées du clic se situent dans un rectangle autour de la station
+        if (pos[0] - RAYON_CLIC <= x <= pos[0] + RAYON_CLIC) and (
+            pos[1] - RAYON_CLIC <= y <= pos[1] + RAYON_CLIC
+        ):
+            global choix_arrivee
+            t.tracer(1, 3)
+            choix_arrivee = station
+            tortue_cercle_arrivee.goto(pos)
+            tortue_cercle_arrivee.showturtle()
+            texte_depart_arrivee()
+            return station
+
+    return None
+
+
+def clic_boutons_trajets(x, y):
+    """Vérifie si un des boutons de trajets a été cliqué"""
+    global choix_trajet
+    for i in range(len(boutons_trajets)):
+        if boutons_trajets[i].clic_dans_bouton(x, y):
+            choix_trajet = i
+            dessine_trajet_choisi()
+            return i
+    return None
+
+
+# Fonctions gérant l'affichage des trajets possibles
 def creer_boutons_trajets():
+    """Crée les 3 boutons de trajets qui peuvent être affichés"""
     for i in range(3):
         boutons_trajets.append(
             Bouton(
@@ -624,7 +632,21 @@ def creer_boutons_trajets():
         )
 
 
+def changer_options_trajets():
+    """Mettre à jour les options possibles de trajets et les afficher"""
+    if len(trajets) == 0:
+        return
+    cacher_options()
+    bouton_go.dessine_bouton()
+    for i in range(len(trajets)):
+        bouton = boutons_trajets[i]
+        trajet = trajets[i]
+        bouton.change_nom(trajet.__str__())
+        bouton.dessine_bouton()
+
+
 def cacher_options():
+    """Cacher tout ce qui a trait aux trajets"""
     t.tracer(0, 0)
     bouton_go.efface_bouton()
     tortue_preview_trajet.clear()
@@ -633,25 +655,32 @@ def cacher_options():
         bouton.efface_bouton()
 
 
-def clic_boutons_trajets(x, y):
-    global choix_trajet
-    for i in range(len(boutons_trajets)):
-        if boutons_trajets[i].clic_dans_bouton(x, y):
-            choix_trajet = i
-            dessine_trajet_choisi()
-            return i
-    return None
+# Fonctions utilitaires
+def distance(point_a, point_b):
+    """Prends deux tuples et retourne la distance entre les deux points"""
+    return ((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2) ** 0.5
+
+
+def station_plus_proche(point):
+    """Retourne la station la plus proche du point, avec la distance avec celle-ci"""
+    best_station, best_dist = None, math.inf
+    for station in stations.values():
+        dist = distance(station.get_position(), point)
+        if dist < best_dist:
+            best_station = station
+            best_dist = dist
+    return (best_station, best_dist)
 
 
 """
 Le Métro
 """
 
-# Écran configuration
-
+# Constantes pour l'écran
 LARGEUR = 1920
 HAUTEUR = 1010
 
+# Configuration des positions des objets sur l'écran
 GAP_HAUTEUR = 50
 GAP_LARGEUR = 50
 GAP_TEXTE = 25
@@ -675,6 +704,7 @@ POS_1ER_BOUTON_TRAJET = (
 POS_BOUTON_GENERER = (POS_TEXTE_GENERER[0] - 15, POS_TEXTE_GENERER[1] - 1)
 POS_BOUTON_GO = (POS_TEXTE_GO[0] - 15, POS_TEXTE_GO[1] - 1)
 
+# Constantes utiles
 COULEUR_LACS = "#6EA6D4"
 COULEUR_TERRE = "#D7E7F6"
 
@@ -682,10 +712,6 @@ RAYON_CLIC = 6
 
 DISTANCE_MAX_MARCHER = 1000
 
-ecran = t.Screen()
-ecran.title("Métro de la SDF")
-ecran.setup(LARGEUR, HAUTEUR)
-ecran.bgcolor(COULEUR_TERRE)
 couleurs_lignes = {
     "jaune": "#FCD205",
     "verte": "#01A852",
@@ -693,7 +719,14 @@ couleurs_lignes = {
     "orange": "#F47416",
 }
 
-# Implémentation des variables
+# Configuration de l'écran
+ecran = t.Screen()
+ecran.title("Métro de la SDF")
+ecran.setup(LARGEUR, HAUTEUR)
+ecran.bgcolor(COULEUR_TERRE)
+
+
+# Déclaration des variables
 stations = {}
 graphe_metro = Graphe(False)
 lignes = []
@@ -747,7 +780,6 @@ tortue_options_trajets = t.Turtle()
 tortue_options_trajets.hideturtle()
 tortue_options_trajets.penup()
 
-
 # Tortue qui dessine les trajets possibles
 tortue_preview_trajet = t.Turtle()
 tortue_preview_trajet.hideturtle()
@@ -755,10 +787,12 @@ tortue_preview_trajet.speed(0)
 tortue_preview_trajet.penup()
 tortue_preview_trajet.pensize(5)
 
+# Setup sur l'écran
 lire_fichier_metro()
 lire_fichier_ile()
 conversion_pos()
 
+# Affichage de l'interface
 dessine_lacs()
 dessine_ile()
 dessine_stations()
@@ -775,6 +809,7 @@ tortue_personnage.pensize(5)
 tortue_personnage.penup()
 tortue_personnage.hideturtle()
 
+# Le clic de l'usager est ce qui détermine ce qui se passe
 ecran.listen()
 ecran.onscreenclick(clic)
 ecran.mainloop()
