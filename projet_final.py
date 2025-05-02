@@ -701,6 +701,7 @@ def station_plus_proche(point):
 Le Métro
 """
 
+
 # Constantes pour l'écran
 LARGEUR = 1920
 HAUTEUR = 1010
