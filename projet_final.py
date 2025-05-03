@@ -579,7 +579,7 @@ def animation_déplacement():
         # il va se cacher
         tortue_requin.speed(3)
         time.sleep(1)
-        tortue_requin.goto((522, -550))
+        tortue_requin.goto((522, -700))
 
     tortue_personnage.speed(0)
     t.tracer(0, 0)
