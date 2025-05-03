@@ -535,7 +535,7 @@ def animation_déplacement():
     if len(liste_de_positions) != 1:
         time.sleep(0.5)
         # Changer de forme
-        tortue_personnage.shape("metro_2.gif")
+        tortue_personnage.shape("metro_1.gif")
         tortue_personnage.speed(2)
 
         # déplacements dans les stations
@@ -576,15 +576,9 @@ def animation_déplacement():
         for i in range(3): # saut du requin
             tortue_requin.goto((522, tortue_requin.ycor() + 60))
             tortue_requin.goto((522, tortue_requin.ycor() - 60))
-        tortue_requin.shape("oh-ho_2.gif")
-        tortue_requin.shape("oh-ho_3.gif")
-        tortue_requin.shape("oh-ho_4.gif")
-        tortue_requin.shape("oh-ho_3.gif")
-        tortue_requin.shape("oh-ho_2.gif")
-        tortue_requin.shape("oh-ho_1.gif")
         # il va se cacher
         tortue_requin.speed(3)
-        time.sleep(0.5)
+        time.sleep(1)
         tortue_requin.goto((522, -550))
 
     tortue_personnage.speed(0)
@@ -731,8 +725,8 @@ Le Métro
 
 
 # Constantes pour l'écran
-LARGEUR = 1920
-HAUTEUR = 1000
+LARGEUR = 1800
+HAUTEUR = 1169
 
 # Configuration des positions des objets sur l'écran
 GAP_HAUTEUR = 50
@@ -760,17 +754,17 @@ POS_BOUTON_GO = (POS_TEXTE_GO[0] - 15, POS_TEXTE_GO[1] - 1)
 
 # Constantes utiles
 COULEUR_LACS = "#2EA4FF"
-COULEUR_TERRE = "#94E2F8"
+COULEUR_TERRE = "#FFFFFF"
 
 RAYON_CLIC = 6
 
 DISTANCE_MAX_MARCHER = 1000
 
 couleurs_lignes = {
-    "jaune": "#FCD205",
-    "verte": "#01A852",
-    "bleue": "#1182CE",
-    "orange": "#F47416",
+    "jaune": "#CCCCCC",
+    "verte": "#CCCCCC",
+    "bleue": "#CCCCCC",
+    "orange": "#CCCCCC",
 }
 
 # Configuration de l'écran
@@ -809,11 +803,8 @@ suit_trajet = False
 
 # Enregistrer les deux gif
 t.register_shape("ami_1.gif")
-t.register_shape("metro_2.gif")
+t.register_shape("metro_1.gif")
 t.register_shape("oh-ho_1.gif")
-t.register_shape("oh-ho_2.gif")
-t.register_shape("oh-ho_3.gif")
-t.register_shape("oh-ho_4.gif")
 
 # Tortue qui écrit le texte qui montre les choix
 tortue_texte_choix = t.Turtle()
@@ -841,7 +832,7 @@ tortue_options_trajets.penup()
 # Tortue qui dessine les trajets possibles
 tortue_preview_trajet = t.Turtle()
 tortue_preview_trajet.hideturtle()
-tortue_preview_trajet.speed(0)
+tortue_preview_trajet.speed(3)
 tortue_preview_trajet.penup()
 tortue_preview_trajet.pensize(5)
 
@@ -870,7 +861,7 @@ tortue_personnage.hideturtle()
 tortue_requin = t.Turtle()
 tortue_requin.hideturtle()
 tortue_requin.penup()
-tortue_requin.goto(522, -550)
+tortue_requin.goto(522, -700)
 tortue_requin.shape("oh-ho_1.gif")
 tortue_requin.showturtle()
 
