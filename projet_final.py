@@ -725,8 +725,8 @@ Le Métro
 
 
 # Constantes pour l'écran
-LARGEUR = 1800
-HAUTEUR = 1169
+LARGEUR = 1920
+HAUTEUR = 1000
 
 # Configuration des positions des objets sur l'écran
 GAP_HAUTEUR = 50
@@ -761,10 +761,10 @@ RAYON_CLIC = 6
 DISTANCE_MAX_MARCHER = 1000
 
 couleurs_lignes = {
-    "jaune": "#CCCCCC",
-    "verte": "#CCCCCC",
-    "bleue": "#CCCCCC",
-    "orange": "#CCCCCC",
+    "jaune": "#FCD205",
+    "verte": "#01A852",
+    "bleue": "#1182CE",
+    "orange": "#F47416",
 }
 
 # Configuration de l'écran
